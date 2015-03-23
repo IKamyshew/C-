@@ -1,0 +1,6 @@
+D:\С# Projects\For git\Sortings\Sortings\bin\Debug\Sortings.exe.config
+D:\С# Projects\For git\Sortings\Sortings\bin\Debug\Sortings.exe
+D:\С# Projects\For git\Sortings\Sortings\bin\Debug\Sortings.pdb
+D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.csprojResolveAssemblyReference.cache
+D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.exe
+D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.pdb
