@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
+/* 
+ * insertion sort O(n^2)
+ * bubble sort    O(n^2)
+ * shaker sort
+ * selection sort O(n^2)
+ */
 namespace ConsoleApplication1
 {
     class Program
@@ -11,6 +18,7 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             Random rand = new Random();
+            
 
             int[] array = new int[15];
             for (int i = 0; i < array.Length; i++)
@@ -18,92 +26,35 @@ namespace ConsoleApplication1
                 array[i] = rand.Next(100);
             }
 
-            Console.WriteLine(string.Join(",", array));
+            Console.WriteLine(string.Join(",", array) + " | Time(ms):");
 
-            Console.WriteLine("Press any key to perform Insertion sort.");
-            Console.ReadKey();
-            Console.WriteLine(string.Join(",", Program.insertionSort(array)));
+            Console.WriteLine("Performing Insertion sort.");
+            sortArray(string.Join(",", Sortings.SortTypes.insertionSort(array)));
 
-            Console.WriteLine("Press any key to perform Bubble sort.");
-            Console.ReadKey();
-            Console.WriteLine(string.Join(",", Program.insertionSort(array)));
 
-            Console.WriteLine("Press any key to perform Shaker sort.");
-            Console.ReadKey();
-            Console.WriteLine(string.Join(",", Program.shakerSort(array)));
+            Console.WriteLine("Performing Bubble sort.");
+            sortArray(string.Join(",", Sortings.SortTypes.bubbleSort(array)));
+
+            Console.WriteLine("Performing Shaker sort.");
+            sortArray(string.Join(",", Sortings.SortTypes.shakerSort(array)));
+
+            Console.WriteLine("Performing Selection sort.");
+            sortArray(string.Join(",", Sortings.SortTypes.selectionSort(array)));
+
+            Console.WriteLine("Performing Shell sort.");
+            sortArray(string.Join(",", Sortings.SortTypes.shellSort(array)));
 
             Console.ReadKey();
         }
 
-        public static int[] insertionSort(int[] array)
+        public static void sortArray(string sortedArray)
         {
-            int[] innerArray = new int[array.Length];
-            Array.Copy(array, innerArray, array.Length);
-
-            for (int i = 1; i < innerArray.Length; i++)
-            {
-                int temp = innerArray[i];
-                for (int j = i - 1; j >= 0 && innerArray[j] > temp; j--)
-                {
-                    innerArray[j + 1] = innerArray[j];
-                    innerArray[j] = temp;
-                }
-            }
-
-            return innerArray;
-        }
-
-        public static int[] bubbleSort(int[] array)
-        {
-            int[] innerArray = new int[array.Length];
-            Array.Copy(array, innerArray, array.Length);
-
-            for (int i = 1; i < innerArray.Length; i++)
-            {
-                int temp = -1;
-                for (int j = 1; j < innerArray.Length; j++)
-                {
-                    if (innerArray[j - 1] > innerArray[j])
-                    {
-                        temp = innerArray[j];
-                        innerArray[j] = innerArray[j - 1];
-                        innerArray[j - 1] = temp;
-                    }
-                }
-            }
-
-            return innerArray;
-        }
-
-        public static int[] shakerSort(int[] array)
-        {
-            int[] innerArray = new int[array.Length];
-            Array.Copy(array, innerArray, array.Length);
-
-            for (int i = 1; i < innerArray.Length; i++)
-            {
-                int temp = -1;
-                for (int j = 1; j < innerArray.Length; j++)
-                {
-                    if (innerArray[j - 1] > innerArray[j])
-                    {
-                        temp = innerArray[j];
-                        innerArray[j] = innerArray[j - 1];
-                        innerArray[j - 1] = temp;
-                    }
-                }
-                for (int j = innerArray.Length - 1; j > 0; j--)
-                {
-                    if (innerArray[j - 1] > innerArray[j])
-                    {
-                        temp = innerArray[j];
-                        innerArray[j] = innerArray[j - 1];
-                        innerArray[j - 1] = temp;
-                    }
-                }
-            }
-
-            return innerArray;
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            Console.Write(sortedArray);
+            time.Stop();
+            Console.WriteLine(" | " + time.Elapsed.TotalMilliseconds);
+            time.Reset();
         }
     }
 }

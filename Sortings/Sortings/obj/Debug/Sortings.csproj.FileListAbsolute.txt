@@ -4,3 +4,9 @@ D:\С# Projects\For git\Sortings\Sortings\bin\Debug\Sortings.pdb
 D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.csprojResolveAssemblyReference.cache
 D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.exe
 D:\С# Projects\For git\Sortings\Sortings\obj\Debug\Sortings.pdb
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\bin\Debug\Sortings.exe.config
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\bin\Debug\Sortings.exe
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\bin\Debug\Sortings.pdb
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\obj\Debug\Sortings.csprojResolveAssemblyReference.cache
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\obj\Debug\Sortings.exe
+D:\Projects\GitHub\C# Personal\Sortings\Sortings\obj\Debug\Sortings.pdb
