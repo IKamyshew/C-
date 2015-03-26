@@ -8,7 +8,7 @@ namespace Sortings
 {
     class SortTypes
     {
-        public static int[] insertionSort(int[] array)
+        public virtual static int[] insertionSort(int[] array)
         {
             int[] innerArray = new int[array.Length];
             Array.Copy(array, innerArray, array.Length);
