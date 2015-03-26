@@ -8,7 +8,7 @@ namespace Vehicles
 {
     abstract class Vehicle
     {
-        private String name;
+        private String name { get; set; }
         protected double speedPerHour;
         private int capacity;
         private int safety;
@@ -20,6 +20,8 @@ namespace Vehicles
             this.capacity = capacity;
             this.safety = safety;
         }
+
+
 
         public abstract double TimeToDestinationPoint(double distance);
     }
