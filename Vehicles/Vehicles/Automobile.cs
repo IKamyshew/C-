@@ -10,8 +10,8 @@ namespace Vehicles
     {
         private int wheels;
 
-        protected Automobile(String name, double speedPerHour, int safety, int capacity, int wheels)
-            : base(name, speedPerHour, capacity, safety)
+        protected Automobile(String name, double speedPerHour, int safety, int capacity, int wheels, string Cost)
+            : base(name, speedPerHour, capacity, safety, Cost)
         {
             this.wheels = wheels;
         }

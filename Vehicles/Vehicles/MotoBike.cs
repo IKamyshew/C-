@@ -8,9 +8,10 @@ namespace Vehicles
 {
     class MotoBike : Bike
     {
+        private static string Cost = "Moderate";
         
         public MotoBike(string Name, double SpeedPerHour, int Safety, int Wheels)
-            : base(Name, SpeedPerHour, Safety, Wheels)
+            : base(Name, SpeedPerHour, Safety, Wheels, Cost)
         {
             
         }

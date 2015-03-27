@@ -12,8 +12,8 @@ namespace Vehicles
         private int Wheels;
         private static int Capacity = 1;
 
-        protected Bike(string Name, double SpeedPerHour, int Safety, int Wheels)
-            : base (Name, SpeedPerHour, Capacity, Safety)
+        protected Bike(string Name, double SpeedPerHour, int Safety, int Wheels, string Cost)
+            : base (Name, SpeedPerHour, Capacity, Safety, Cost)
         {
             this.Wheels = Wheels;
         }

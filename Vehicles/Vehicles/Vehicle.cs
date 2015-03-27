@@ -12,15 +12,22 @@ namespace Vehicles
         protected double SpeedPerHour;
         private int Capacity;
         private int Safety;
+        private string Cost;
 
-        protected Vehicle(string Name, double SpeedPerHour, int Capacity, int Safety)
+        protected Vehicle(string Name, double SpeedPerHour, int Capacity, int Safety, string Cost)
         {
             this.Name = Name;
             this.SpeedPerHour = SpeedPerHour;
             this.Capacity = Capacity;
             this.Safety = Safety;
+            this.Cost = Cost;
         }
 
         public abstract double TimeToDestinationPoint(double distance);
+
+        public override string ToString()
+        {
+            return "Vehicle characteristics: name: " + Name + "; Speed per hour: " + SpeedPerHour + "; Capacity: " + Capacity + "; Safety: " + Safety + "%; Cost: " + Cost + ";";
+        }
     }
 }
