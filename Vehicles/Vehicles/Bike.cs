@@ -8,13 +8,14 @@ namespace Vehicles
 {
     abstract class Bike : Vehicle
     {
-        private int wheels;
-        private static int capacity = 1;
+        
+        private int Wheels;
+        private static int Capacity = 1;
 
-        protected Bike(String name, double speedPerHour, int safety, int wheels)
-            : base (name, speedPerHour, capacity, safety)
+        protected Bike(string Name, double SpeedPerHour, int Safety, int Wheels)
+            : base (Name, SpeedPerHour, Capacity, Safety)
         {
-            this.wheels = wheels;
+            this.Wheels = Wheels;
         }
     }
 }

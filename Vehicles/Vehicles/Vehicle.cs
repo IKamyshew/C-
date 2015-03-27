@@ -8,20 +8,18 @@ namespace Vehicles
 {
     abstract class Vehicle
     {
-        private String name { get; set; }
-        protected double speedPerHour;
-        private int capacity;
-        private int safety;
+        public string Name { get; protected set; }
+        protected double SpeedPerHour;
+        private int Capacity;
+        private int Safety;
 
-        protected Vehicle(String name, double speedPerHour, int capacity, int safety)
+        protected Vehicle(string Name, double SpeedPerHour, int Capacity, int Safety)
         {
-            this.name = name;
-            this.speedPerHour = speedPerHour;
-            this.capacity = capacity;
-            this.safety = safety;
+            this.Name = Name;
+            this.SpeedPerHour = SpeedPerHour;
+            this.Capacity = Capacity;
+            this.Safety = Safety;
         }
-
-
 
         public abstract double TimeToDestinationPoint(double distance);
     }

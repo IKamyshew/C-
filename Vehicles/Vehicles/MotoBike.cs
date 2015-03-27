@@ -8,15 +8,16 @@ namespace Vehicles
 {
     class MotoBike : Bike
     {
-        public MotoBike(String name, double speedPerHour, int safety, int wheels)
-            : base(name, speedPerHour, safety, wheels)
+        
+        public MotoBike(string Name, double SpeedPerHour, int Safety, int Wheels)
+            : base(Name, SpeedPerHour, Safety, Wheels)
         {
             
         }
 
-        public override double TimeToDestinationPoint(double distance)
+        public override double TimeToDestinationPoint(double Distance)
         {
-            return distance / speedPerHour;
+            return Distance / SpeedPerHour;
         }
     }
 }
