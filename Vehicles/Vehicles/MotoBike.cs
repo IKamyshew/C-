@@ -8,12 +8,12 @@ namespace Vehicles
 {
     class MotoBike : Bike
     {
+        private static int Safety = 30;
         private static string Cost = "Moderate";
-        
-        public MotoBike(string Name, double SpeedPerHour, int Safety, int Wheels)
-            : base(Name, SpeedPerHour, Safety, Wheels, Cost)
+
+        public MotoBike(string Name, double SpeedPerHour)
+            : base(Name, SpeedPerHour, Safety, Cost)
         {
-            
         }
 
         public override double TimeToDestinationPoint(double Distance)

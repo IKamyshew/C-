@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace Vehicles
 {
-    abstract class Automobile : Vehicle
+    class Automobile : Vehicle
     {
-        private int wheels;
+        private static int Safety = 50;
+        private static string Cost = "Moderate";
 
-        protected Automobile(String name, double speedPerHour, int safety, int capacity, int wheels, string Cost)
-            : base(name, speedPerHour, capacity, safety, Cost)
+        public Automobile(string Name, double SpeedPerHour, int Capacity)
+            : base(Name, SpeedPerHour, Capacity, Safety, Cost)
         {
-            this.wheels = wheels;
+        }
+
+        public override double TimeToDestinationPoint(double Distance)
+        {
+            return Distance / SpeedPerHour;
         }
     }
 }
