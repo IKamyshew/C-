@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Automobile.cs" />
+    <Compile Include="Bicycle.cs" />
     <Compile Include="Bike.cs" />
     <Compile Include="MotoBike.cs" />
     <Compile Include="Plane.cs" />

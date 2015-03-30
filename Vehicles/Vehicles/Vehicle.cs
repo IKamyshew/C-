@@ -19,7 +19,8 @@ namespace Vehicles
             this.Name = Name;
             this.SpeedPerHour = SpeedPerHour;
             this.Capacity = Capacity;
-            this.Safety = Safety;
+            if (Safety <= 100 && Safety >= 0)
+                this.Safety = Safety; 
             this.Cost = Cost;
         }
 
@@ -27,7 +28,7 @@ namespace Vehicles
 
         public override string ToString()
         {
-            return "Vehicle characteristics: name: " + Name + "; Speed per hour: " + SpeedPerHour + "; Capacity: " + Capacity + "; Safety: " + Safety + "%; Cost: " + Cost + ";";
+            return "Vehicle characteristics: name: " + Name + "; Speed per hour: " + SpeedPerHour + "; Capacity: " + Capacity + "; Safety: " + Safety + " %; Cost: " + Cost + ";";
         }
     }
 }
