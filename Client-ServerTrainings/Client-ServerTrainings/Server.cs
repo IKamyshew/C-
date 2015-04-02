@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client_ServerTrainings
@@ -22,9 +23,19 @@ namespace Client_ServerTrainings
             // В бесконечном цикле
             while (true)
             {
-                // Принимаем новых клиентов и передаем их на обработку новому экземпляру класса Client
-                new Client(Listener.AcceptTcpClient());
+                // Принимаем нового клиента
+                TcpClient Client = Listener.AcceptTcpClient();
+                // Создаем поток
+                Thread Thread = new Thread(new ParameterizedThreadStart(ClientThread));
+                // И запускаем этот поток, передавая ему принятого клиента
+                Thread.Start(Client);
             }
+        }
+
+        static void ClientThread(Object StateInfo)
+        {
+            // Просто создаем новый экземпляр класса Client и передаем ему приведенный к классу TcpClient объект StateInfo
+            new Client((TcpClient)StateInfo);
         }
 
         // Остановка сервера
@@ -40,6 +51,7 @@ namespace Client_ServerTrainings
 
         static void Main(string[] args)
         {
+            
             // Создадим новый сервер на порту 80
             new Server(80);
         }
