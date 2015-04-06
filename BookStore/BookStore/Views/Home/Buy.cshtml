@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div>
+        <h3>Form for purchase</h3>
+        <form method="post" action="">
+            <input type="hidden" value="@ViewBag.BookId" name="BookId" />
+            <table>
+                <tr><td><p>Enter your name </p></td>
+                    <td><input type="text" name="Person" /> </td></tr>
+                <tr><td><p>Enter your adress: </p></td><td>
+                    <input type="text" name="Address" /> </td></tr>
+                <tr><td><input type="submit" value="Send" /> </td>
+                <td></td></tr>
+            </table>
+        </form>
+    </div>
