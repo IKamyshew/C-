@@ -15,7 +15,6 @@ namespace Academy08._04.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public ActionResult Login(LogViewModel model, string returnUrl)
         {
@@ -40,7 +39,7 @@ namespace Academy08._04.Controllers
             }
             return View(model);
         }
-
+    
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
@@ -56,6 +55,8 @@ namespace Academy08._04.Controllers
             {
                 try
                 {
+                    List<User> users = _db.Users.ToList();
+
                     User user = (from u in _db.Users
                                  where u.Login == login && u.Password == password
                                  select u).FirstOrDefault();

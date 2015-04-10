@@ -10,21 +10,21 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <title>Вход в систему</title>
+    <title>Login</title>
 </head>
 <body>
     <script src="~/Scripts/jquery-1.7.1.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
      
-    <h2>Вход в систему</h2>
-    <p>Введите свой логин и пароль для входа в систему</p>
+    <h2>Authorization</h2>
+    <p>Enter yout login and password</p>
      
     @using (Html.BeginForm()) {
         @Html.ValidationSummary(true)
      
         <fieldset>
-            <legend>Войти в систему</legend>
+            <legend>Log in</legend>
      
             <div class="editor-label">
                 @Html.LabelFor(model => model.UserName)
@@ -50,7 +50,7 @@
             </div>
      
             <p>
-                <input type="submit" value="Войти" />
+                <input type="submit" value="Submit" />
             </p>
         </fieldset>
     }

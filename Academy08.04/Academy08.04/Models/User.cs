@@ -38,7 +38,6 @@ namespace Academy08._04.Models
         public Role Role { get; set; }
 
         [Display(Name = "Group")]
-        [MaxLength(50, ErrorMessage = "Maximum length Exceeded")]
         public int? GroupId { get; set; }
         public Group Group { get; set; }
 

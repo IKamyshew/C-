@@ -14,7 +14,7 @@ namespace Academy08._04.Providers
     {
         public override string[] GetRolesForUser(string login)
         {
-            string[] role = new string[] { };
+            string[] role = new string[] { };       
             using (AcademyContext _db = new AcademyContext())
             {
                 try
