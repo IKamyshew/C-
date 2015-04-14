@@ -4,12 +4,35 @@
     ViewBag.Title = "Users list";
 }
 
+<div>
+    <form method="post" action="/User/Index">
+        <table>
+            <tr>
+                <td><p>Group: </p></td>
+                <td> @Html.DropDownList("group_filter", ViewBag.Groups as SelectList)</td>
+                <td><p>Role: </p></td>
+                <td> @Html.DropDownList("role_filter", ViewBag.Roles as SelectList)</td>
+                <td><input type="submit" value="filter" /> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
 <h2>Users list</h2>
 
 <table>
-    <tr>
+    <div>
         <th>
             @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Role.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group)
         </th>
         @if (HttpContext.Current.User.IsInRole("Manager"))
         {
@@ -20,54 +43,40 @@
                 @Html.DisplayNameFor(model => model.Password)
             </th>
         }
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GroupId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RoleId)
-        </th>
         <th></th>
-    </tr>
+    </div>
+    <div>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <tr>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.RoleId)
+                </th>
+                <th>
+                    @Html.DisplayFor(modelItem => item.GroupId)
+                </th>
+                @if (HttpContext.Current.User.IsInRole("Manager"))
+                {
+                    <th>
+                        @Html.DisplayFor(modelItem => item.Login)
+                    </th>
 
-    @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            @if (HttpContext.Current.User.IsInRole("Manager"))
-            {
-                <th>
-                    @Html.DisplayFor(modelItem => item.Login)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Password)
-                </th>
-            }
-            <th>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.GroupId)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.RoleId)
-            </th>
-            @if (HttpContext.Current.User.IsInRole("Manager"))
-            {
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            }
-        </tr>
-    }
+                    <th>
+                        @Html.DisplayFor(modelItem => item.Password)
+                    </th>
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                }
+            </tr>
+        }
+    </div>
 </table>

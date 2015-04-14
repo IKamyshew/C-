@@ -1,17 +1,19 @@
 ﻿@model Academy08._04.Models.User
 
 @{
-    ViewBag.Title = "Creating user";
+    ViewBag.Title = "Edit user";
 }
 
-<h2>Creating new user</h2>
+<h2>Edit user</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>New user</legend>
+        <legend>User</legend>
+
+        @Html.HiddenFor(model => model.Id)
 
         <div class="editor-label">
             @Html.LabelFor(model => model.FirstName)
@@ -20,7 +22,7 @@
             @Html.EditorFor(model => model.FirstName)
             @Html.ValidationMessageFor(model => model.FirstName)
         </div>
-
+        
         <div class="editor-label">
             @Html.LabelFor(model => model.LastName)
         </div>
@@ -44,7 +46,7 @@
             @Html.EditorFor(model => model.Password)
             @Html.ValidationMessageFor(model => model.Password)
         </div>
-        
+
         <div class="editor-label">
             @Html.LabelFor(model => model.RoleId)
         </div>
@@ -62,10 +64,10 @@
         </div>
 
         <p>
-            <input type="submit" value="Add" />
+            <input type="submit" value="Save changes" />
         </p>
     </fieldset>
-}   
+}
 @section Scripts {
     @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
 }
