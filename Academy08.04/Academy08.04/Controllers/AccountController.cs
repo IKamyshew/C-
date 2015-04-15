@@ -23,13 +23,14 @@ namespace Academy08._04.Controllers
                 if (ValidateUser(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Request");
+                        return RedirectToAction("User", "PersonalPage");
                     }
                 }
                 else

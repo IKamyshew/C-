@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Academy08._04.Models;
+using System.Web.UI;
 
 namespace Academy08._04.Controllers
 {
@@ -58,8 +59,8 @@ namespace Academy08._04.Controllers
                            select user;
             }
 
-            List<Group> groups = db.Groups.ToList();
             //Добавляем в список возможность выбора всех
+            List<Group> groups = db.Groups.ToList();
             groups.Insert(0, new Group { Name = "All", Id = 0 });
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
@@ -129,6 +130,15 @@ namespace Academy08._04.Controllers
             db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult PersonalPage(int id)
+        {
+            // string userName = HttpContext.User.Identity.Name;
+            User user = db.Users.Find(id);
+            return View(user);
         }
     }
 }

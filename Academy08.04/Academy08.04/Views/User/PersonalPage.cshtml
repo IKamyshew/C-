@@ -1,0 +1,37 @@
+﻿@model Academy08._04.Models.User
+@{
+    ViewBag.Title = "Personal Page";
+}
+
+<h2>Personal Page</h2>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName):
+        </th>
+        <td>
+            @Html.DisplayFor(model => Model.FirstName)
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName):
+        </th>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Role.Name):
+        </th>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Group.Name)
+        </th>
+        <td>
+        </td>
+    </tr>
+</table>

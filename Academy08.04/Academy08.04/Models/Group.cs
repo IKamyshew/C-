@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -13,7 +14,7 @@ namespace Academy08._04.Models
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Name")]
+        [DisplayName("Group")]
         [MaxLength(50, ErrorMessage = "Maximum length Exceeded")]
         public string Name { get; set; }
     }
