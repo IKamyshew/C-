@@ -13,7 +13,7 @@ namespace Academy08._04.Models
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Mark> Marks { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<Schedule> Schedule { get; set; }
         public DbSet<TeachersGroups> TeachersGroups { get; set; }
     }
 }

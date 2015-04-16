@@ -11,12 +11,13 @@ using System.Web.UI;
 namespace Academy08._04.Controllers
 {
     // 
-    [Authorize(Roles = "Manager, Teacher")]
+    
     public class UserController : Controller
     {
         private AcademyContext db = new AcademyContext();
 
         [HttpGet]
+        [Authorize(Roles = "Manager, Teacher")]
         public ActionResult Index()
         {
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
@@ -26,13 +27,14 @@ namespace Academy08._04.Controllers
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
             List<Role> roles = db.Roles.ToList();
-            roles.Insert(0, new Role { Id = 0, Name = "All" });
+            roles.Insert(0, new Role { Name = "All", Id = 0 });
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
 
             return View(users);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager, Teacher")]
         public ActionResult Index(int group_filter, int role_filter)
         {
             IEnumerable<User> allUsers = null;
@@ -134,11 +136,26 @@ namespace Academy08._04.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult PersonalPage(int id)
+        public ActionResult PersonalPage()
         {
-            // string userName = HttpContext.User.Identity.Name;
-            User user = db.Users.Find(id);
+            string userName = HttpContext.User.Identity.Name;
+            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+            User user = users.FirstOrDefault(i => i.Login == userName);
             return View(user);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Schedule()
+        {
+
+            var shedule = db.Schedule.ToList();
+
+            List<Role> roles = db.Roles.ToList();
+            roles.Insert(0, new Role { Name = "All", Id = 0 });
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+
+            return View(shedule);
         }
     }
 }
