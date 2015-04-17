@@ -19,8 +19,10 @@ namespace Academy08._04.Models
 
         [Key][Column(Order = 2)]
         public int? GroupId { get; set; }
+        public Group Group { get; set; }
 
         public int? SubjectId { get; set; }
+        public Subject Subject { get; set; }
 
         public int Classroom { get; set; }
 

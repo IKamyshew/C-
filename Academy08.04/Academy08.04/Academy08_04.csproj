@@ -129,11 +129,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\InterfaceController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504171256191_InitialMigrations.cs" />
+    <Compile Include="Migrations\201504171256191_InitialMigrations.Designer.cs">
+      <DependentUpon>201504171256191_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AcademyContext.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\LogViewModel.cs" />
@@ -183,10 +189,15 @@
     <Content Include="Views\Service\Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\PersonalPage.cshtml" />
+    <Content Include="Views\Interface\PersonalPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\Schedule.cshtml" />
+    <Content Include="Views\Interface\Schedule.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201504171256191_InitialMigrations.resx">
+      <DependentUpon>201504171256191_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

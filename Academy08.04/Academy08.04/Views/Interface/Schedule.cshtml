@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Academy08._04.Models.Schedule>
+@{
+    ViewBag.Title = "Shedule";
+}
+
+<h2>Schedule</h2>
+
+<table border="1">
+    <th width="10">
+        Lesson
+    </th>
+    <th width="15">
+        Classroom
+    </th>
+    <th width="50">
+        Subject
+    </th>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td width="10">
+                @Html.DisplayFor(modelItem => item.Lesson)
+            </td>
+            <td width="15">
+                @Html.DisplayFor(modelItem => item.Classroom)
+            </td>
+            <td width="50">
+                @Html.DisplayFor(modelItem => item.Subject.Name)
+            </td>
+        </tr>
+    }
+</table>

@@ -16,7 +16,7 @@ namespace Academy08._04
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "User", action = "Schedule", id = UrlParameter.Optional }
+                defaults: new { controller = "Interface", action = "PersonalPage", id = UrlParameter.Optional }
             );
         }
     }
