@@ -4,7 +4,26 @@
     ViewBag.Title = "Personal Page";
 }
 
-<h2>Personal Page</h2>
+<table>
+    <tr>
+        <td>
+            <h2>Personal Page</h2>
+        </td>
+        @if (HttpContext.Current.User.IsInRole("Manager") || HttpContext.Current.User.IsInRole("Teacher"))
+        {       
+        <td>
+            @Html.ActionLink("Go to admin panel", "Index", "User", null, null)
+        </td>
+        }
+        <td>
+            @Html.ActionLink("Schedule", "Schedule")
+        </td>
+        <td>
+            @Html.ActionLink("Marks", "Marks")
+        </td>
+    </tr>
+</table>
+
 <table>
     <tr>
         <th>

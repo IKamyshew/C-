@@ -4,7 +4,16 @@
     ViewBag.Title = "Groups";   
 }
 
-<h2>Groups</h2>
+<table>
+    <tr>
+        <td>
+            <h2>Groups</h2>
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+    </tr>
+</table>
 
 @using (Html.BeginForm())
 {

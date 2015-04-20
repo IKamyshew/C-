@@ -3,6 +3,17 @@
     ViewBag.Title = "Users list";
 }
 
+<table>
+    <tr>
+        <td>
+            <h2>Users list</h2>
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+    </tr>
+</table>
+
 <div>
     <form method="post" action="/User/Index">
         <table>
@@ -16,8 +27,6 @@
         </table>
     </form>
 </div>
-
-<h2>Users list</h2>
 
 <table>
     <tr>
@@ -76,4 +85,13 @@
             }
         </tr>
     }
+    @if (HttpContext.Current.User.IsInRole("Manager"))
+    {
+        <tr>
+            <td>
+                @Html.ActionLink("Add new user", "Create")
+            </td>
+        </tr>
+    }
+
 </table>

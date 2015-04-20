@@ -15,18 +15,31 @@
     </form>
 </div>
 
-<h2>Schedule</h2>
+
+
+<table>
+    <tr>
+        <td>
+            <h2>Schedule</h2>
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+    </tr>
+</table>
 
 <table border="1">
-    <th width="10">
-        Lesson
-    </th>
-    <th width="15">
-        Classroom
-    </th>
-    <th width="50">
-        Subject
-    </th>
+    <tr>
+        <th width="10">
+            Lesson
+        </th>
+        <th width="15">
+            Classroom
+        </th>
+        <th width="50">
+            Subject
+        </th>
+    </tr>
 
     @foreach (var item in Model)
     {
