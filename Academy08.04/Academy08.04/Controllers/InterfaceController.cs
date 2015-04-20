@@ -68,5 +68,22 @@ namespace Academy08._04.Controllers
 
             return View(allSchedules.OrderBy(u => u.Lesson).ToList());
         }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Marks()
+        {
+            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+            string userName = HttpContext.User.Identity.Name;
+            User user = users.FirstOrDefault(i => i.Login == userName);
+
+            var subjects = db.Subjects.ToList();
+
+            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
+            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+
+            return View(subjects);
+        }
     }
 }

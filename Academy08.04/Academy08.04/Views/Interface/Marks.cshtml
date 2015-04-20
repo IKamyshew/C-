@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Academy08._04.Models.Subject>
+@{
+    ViewBag.Title = "Marks";
+}
+
+<table>
+    <tr>
+        <td>
+            <h2>Marks</h2>
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>
+            Subject
+        </th>
+        <th>
+            Date
+        </th>
+    </tr>
+
+    @foreach (var sub in Model)
+    {
+        <tr>
+            @Html.DisplayNameFor(subItem => subItem.Name)
+            @Html.DisplayFor(subItem => subItem.Name)
+        </tr>
+    }
+</table>
