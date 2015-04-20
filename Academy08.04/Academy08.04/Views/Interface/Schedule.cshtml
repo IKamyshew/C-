@@ -3,6 +3,18 @@
     ViewBag.Title = "Shedule";
 }
 
+<div>
+    <form method="post" action="/Interface/Schedule">
+        <table>
+            <tr>
+                <td>Date: </td>
+                <td>@Html.DropDownList("date_filter", ViewBag.Dates as SelectList)</td>
+                <td><input type="submit" value="Search" /></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
 <h2>Schedule</h2>
 
 <table border="1">

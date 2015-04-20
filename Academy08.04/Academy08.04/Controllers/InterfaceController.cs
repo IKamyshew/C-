@@ -35,14 +35,38 @@ namespace Academy08._04.Controllers
         public ActionResult Schedule()
         {
 
-            List<Schedule> shedule = db.Schedule.Include(u => u.Subject).ToList();
-            
 
-            List<Role> roles = db.Roles.ToList();
-            roles.Insert(0, new Role { Name = "All", Id = 0 });
-            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            string userName = HttpContext.User.Identity.Name;
+            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+            User user = users.FirstOrDefault(i => i.Login == userName);
 
-            return View(shedule);
+            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
+            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+
+            return View(schedule);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Schedule(DateTime date_filter)
+        {
+            IEnumerable<Schedule> allSchedules = null;
+            if (date_filter == null)
+            {
+                RedirectToAction("Schedule");
+            }
+            else
+            {
+                allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
+                               where schedulesDB.Date == date_filter
+                               select schedulesDB;
+            }
+
+            List<Schedule> schedules = db.Schedule.ToList();
+            ViewBag.Dates = new SelectList(schedules, "Date", "Date");
+
+            return View(allSchedules.OrderBy(u => u.Lesson).ToList());
         }
     }
 }
