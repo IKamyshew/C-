@@ -34,8 +34,6 @@ namespace Academy08._04.Controllers
         [HttpGet]
         public ActionResult Schedule()
         {
-
-
             string userName = HttpContext.User.Identity.Name;
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             User user = users.FirstOrDefault(i => i.Login == userName);
@@ -73,17 +71,21 @@ namespace Academy08._04.Controllers
         [HttpGet]
         public ActionResult Marks()
         {
+            //getting current user
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             string userName = HttpContext.User.Identity.Name;
             User user = users.FirstOrDefault(i => i.Login == userName);
 
+            // geting model (subjects and marks)
             var subjects = db.Subjects.ToList();
+            var marks = db.Marks.OrderBy(s => s.SubjectId).OrderBy(d => d.Date).ToList();
+            ViewBag.Subjects = subjects;
 
-            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
-            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
-            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+            //getting header dates
+            IEnumerable<Academy08._04.Models.Marks> dates = db.Marks.GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
+            ViewBag.DataHeader = dates;
 
-            return View(subjects);
+            return View(marks);
         }
     }
 }

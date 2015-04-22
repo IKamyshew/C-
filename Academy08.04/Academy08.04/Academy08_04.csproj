@@ -130,7 +130,6 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\InterfaceController.cs" />
-    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -139,11 +138,16 @@
     <Compile Include="Migrations\201504171256191_InitialMigrations.Designer.cs">
       <DependentUpon>201504171256191_InitialMigrations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504211015471_Initial.cs" />
+    <Compile Include="Migrations\201504211015471_Initial.Designer.cs">
+      <DependentUpon>201504211015471_Initial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AcademyContext.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\LogViewModel.cs" />
-    <Compile Include="Models\Mark.cs" />
+    <Compile Include="Models\Marks.cs" />
+    <Compile Include="Models\MarksModel.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Schedule.cs" />
     <Compile Include="Models\Subject.cs" />
@@ -186,7 +190,7 @@
     <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Service\Groups.cshtml" />
+    <Content Include="Views\User\Groups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Interface\PersonalPage.cshtml" />
@@ -198,10 +202,14 @@
     <EmbeddedResource Include="Migrations\201504171256191_InitialMigrations.resx">
       <DependentUpon>201504171256191_InitialMigrations.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504211015471_Initial.resx">
+      <DependentUpon>201504211015471_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Interface\Marks.cshtml" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

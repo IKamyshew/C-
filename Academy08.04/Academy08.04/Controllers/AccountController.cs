@@ -30,7 +30,7 @@ namespace Academy08._04.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("User", "PersonalPage");
+                        return RedirectToAction("PersonalPage", "Interface");
                     }
                 }
                 else

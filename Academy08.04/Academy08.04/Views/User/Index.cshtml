@@ -11,6 +11,9 @@
         <td>
             @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
         </td>
+        <td>
+            @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+        </td>
     </tr>
 </table>
 
@@ -90,6 +93,13 @@
         <tr>
             <td>
                 @Html.ActionLink("Add new user", "Create")
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                @Html.ActionLink("Manage groups", "Groups")
             </td>
         </tr>
     }

@@ -7,14 +7,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy08._04.Models
 {
-    public class Mark
+    public class Marks
     {
-        [Key][Column(Order = 0)]
+        [Key]
+        [Column(Order = 0)]
         public int? StudentId { get; set; }
-        [Key][Column(Order = 1)]
+
+        [Key]
+        [Column(Order = 1)]
         public int? SubjectId { get; set; }
+        public Subject Subject { get; set; }
+
+        [Key]
+        [Column(Order = 2)]
         public DateTime Date { get; set; }
-        public int Marks { get; set; }
+
+        public int Mark { get; set; }
     }
 
 }

@@ -130,5 +130,45 @@ namespace Academy08._04.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public ActionResult Groups()
+        {
+            IEnumerable<Academy08._04.Models.Group> groups = db.Groups.ToList();
+            ViewBag.Groups = groups;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Groups(Group group)
+        {
+            bool flag = true;
+            foreach (var existedGroups in db.Groups)
+            {
+                if (existedGroups.Name.Equals(group.Name)) 
+                {
+                    flag = false;
+                }
+            }
+
+            if (flag) { 
+                db.Groups.Add(group);
+                db.SaveChanges();
+            }
+
+            IEnumerable<Academy08._04.Models.Group> groups = db.Groups.ToList();
+            ViewBag.Groups = groups;
+            return View();
+        }
+
+        public ActionResult DeleteGroup(int id)
+        {
+            Group group = db.Groups.Find(id);
+            if (group != null) { 
+                db.Groups.Remove(group);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Groups");
+        }
     }
 }

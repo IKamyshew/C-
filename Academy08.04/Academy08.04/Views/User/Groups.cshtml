@@ -12,6 +12,9 @@
         <td>
             @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
         </td>
+        <td>
+            @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+        </td>
     </tr>
 </table>
 
@@ -34,12 +37,17 @@
     </fieldset>
 }
 <table>
-    @foreach(Group item in ViewBag.Groups) //null reference exception
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Name</td>
-            <td>@Html.ActionLink("Delete", "DeleteGroup", new {id=item.Id})</td>
-        </tr>
+    @if (ViewBag.Groups != null)
+    { 
+        int i = 0;
+        foreach (Group item in ViewBag.Groups as IEnumerable<Academy08._04.Models.Group>) //null reference exception
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@item.Name</td>
+                <td>@Html.ActionLink("Delete", "DeleteGroup", new {id=item.Id})</td>
+            </tr>
+        }
     }
 </table>

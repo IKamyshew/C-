@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Academy08._04.Models
 {
-    public class Subject
+    public class MarksModel
     {
-        public int id { get; set; }
-
-        public string Name { get; set; }
+        public Subject[] Subjects { get; set; }
+        public Marks[] Marks { get; set; }
     }
 }

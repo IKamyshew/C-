@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Academy08._04.Models.Subject>
+﻿@model IEnumerable<Academy08._04.Models.Marks>
 @{
     ViewBag.Title = "Marks";
 }
@@ -11,24 +11,45 @@
         <td>
             @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
         </td>
+        <td>
+            @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+        </td>
     </tr>
 </table>
 
-<table>
+<table border="1">
     <tr>
         <th>
             Subject
         </th>
-        <th>
-            Date
-        </th>
+        @if (ViewBag.DataHeader != null)
+        {
+            foreach (var date in ViewBag.DataHeader as IEnumerable<Academy08._04.Models.Marks>)
+            {
+                <th>
+                    @Html.DisplayFor(dateItem => date.Date)
+                </th>
+            }
+        }
     </tr>
 
-    @foreach (var sub in Model)
-    {
-        <tr>
-            @Html.DisplayNameFor(subItem => subItem.Name)
-            @Html.DisplayFor(subItem => subItem.Name)
-        </tr>
+        @if (ViewBag.Subjects != null)
+        {
+            foreach (var subj in ViewBag.Subjects as IEnumerable<Academy08._04.Models.Subject>)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(subjItem => subj.Name)
+                    </th>
+                    @foreach (var mark in Model)
+                    {
+                        if (mark.SubjectId == subj.id) { 
+                        <td>
+                            @Html.DisplayFor(markItem => mark.Mark)
+                        </td>
+                        }
+                    }
+            </tr>
+        }
     }
 </table>
