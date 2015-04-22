@@ -24,32 +24,68 @@
         </th>
         @if (ViewBag.DataHeader != null)
         {
+            
             foreach (var date in ViewBag.DataHeader as IEnumerable<Academy08._04.Models.Marks>)
             {
                 <th>
                     @Html.DisplayFor(dateItem => date.Date)
                 </th>
             }
+            <th>
+                Average
+            </th>
         }
     </tr>
 
         @if (ViewBag.Subjects != null)
         {
+            List<Academy08._04.Models.Marks> dates = ViewBag.DataHeader;
             foreach (var subj in ViewBag.Subjects as IEnumerable<Academy08._04.Models.Subject>)
             {
                 <tr>
                     <th>
                         @Html.DisplayFor(subjItem => subj.Name)
                     </th>
-                    @foreach (var mark in Model)
-                    {
-                        if (mark.SubjectId == subj.id) { 
-                        <td>
-                            @Html.DisplayFor(markItem => mark.Mark)
-                        </td>
-                        }
+                    @{
+                IEnumerable<Academy08._04.Models.Marks> marks = Model.Where(m => m.SubjectId == subj.id).OrderBy(d => d.Date) as IEnumerable<Academy08._04.Models.Marks>;
+                        Academy08._04.Models.Marks mark = null;
+                        bool flag = false;
+                        double average = 0.0;
                     }
-            </tr>
+                    @for (int dateIndex = 0; dateIndex < dates.Count; dateIndex++)
+                    {
+                        foreach (var checkMark in marks)
+                        {
+                            if (checkMark.Date == dates[dateIndex].Date)
+                            {
+                                flag = true;
+                                mark = checkMark;
+                                average+= checkMark.Mark;
+                            }
+                        }
+                        if (flag)
+                        {
+                            flag = false;
+                            <td>
+                                @Html.DisplayFor(markItem => mark.Mark)
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                -
+                            </td>
+                        }
+                           
+                    }
+                        @if (marks.Count() != 0)
+                        {
+                            average = Math.Round(average / marks.Count(), 1);
+                        }
+                        <td>
+                            @average
+                        </td>
+                </tr>  
+            }
         }
-    }
 </table>

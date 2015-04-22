@@ -15,11 +15,6 @@ namespace Academy08._04.Controllers
 
         private AcademyContext db = new AcademyContext();
 
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [Authorize]
         [HttpGet]
         public ActionResult PersonalPage()
@@ -67,7 +62,7 @@ namespace Academy08._04.Controllers
             return View(allSchedules.OrderBy(u => u.Lesson).ToList());
         }
 
-        [Authorize]
+        [Authorize(Roles = "Student")]
         [HttpGet]
         public ActionResult Marks()
         {
@@ -86,6 +81,88 @@ namespace Academy08._04.Controllers
             ViewBag.DataHeader = dates;
 
             return View(marks);
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpGet]
+        public ActionResult MarksTeacher()
+        {
+            //Filter
+            List<Group> groups = db.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            List<Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+
+            //View
+            IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == 2).ToList();
+            var marks = db.Marks.Where(s => s.SubjectId == 1).ToList();
+            ViewBag.Students = students;
+
+            List<Academy08._04.Models.Marks> dates = db.Marks.Where(s => s.SubjectId == 1).GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
+            List<Academy08._04.Models.Marks> filteredDates = new List<Academy08._04.Models.Marks>();
+            foreach (var date in dates)
+            {
+                foreach (var student in students)
+                {
+                    if (date.StudentId == student.Id) { 
+                        filteredDates.Add(date);
+                        break;
+                    }
+                }
+            }
+            ViewBag.DataHeader = filteredDates;
+
+            return View(marks);
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpPost]
+        public ActionResult MarksTeacher(int group_filter, int subject_filter)
+        {
+            //Filter
+            List<Group> groups = db.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            List<Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+
+            //View
+            IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == group_filter).ToList();
+            var marks = db.Marks.Where(s => s.SubjectId == subject_filter).ToList();
+            ViewBag.Students = students;
+
+            List<Academy08._04.Models.Marks> dates = db.Marks.Where(s => s.SubjectId == subject_filter).GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
+            List<Academy08._04.Models.Marks> filteredDates = new List<Academy08._04.Models.Marks>();
+            foreach (var date in dates)
+            {
+                foreach (var student in students)
+                {
+                    if (date.StudentId == student.Id)
+                    {
+                        filteredDates.Add(date);
+                        break;
+                    }
+                }
+            }
+            ViewBag.DataHeader = filteredDates;
+
+            return View(marks);
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpGet]
+        public ActionResult AddMarks()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpPost]
+        public ActionResult AddMarks()
+        {
+
+            return RedirectToAction("MarksTeacher");
         }
     }
 }

@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "MarksTeacher";
+}
+
+<table>
+    <tr>
+        <td>
+            <h2>Marks</h2>
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+        <td>
+            @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+        </td>
+    </tr>
+</table>
+
+<div>
+    <form method="post" action="/Interface/MarksTeacher">
+        <table>
+            <tr>
+                <td><p>Group: </p></td>
+                <td> @Html.DropDownList("group_filter", ViewBag.Groups as SelectList)</td>
+                <td><p>Subject: </p></td>
+                <td> @Html.DropDownList("subject_filter", ViewBag.Subjects as SelectList)</td>
+                <td><input type="submit" value="Search" /> </td>
+                <td>@Html.ActionLink("Add marks to subject", "AddMarks")</td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<table border="1">
+    <tr>
+        <th>
+            Student
+        </th>
+        @if (ViewBag.DataHeader != null)
+        {
+
+            foreach (var date in ViewBag.DataHeader as IEnumerable<Academy08._04.Models.Marks>)
+            {
+                <th>
+                    @Html.DisplayFor(dateItem => date.Date)
+                </th>
+            }
+            <th>
+                Average
+            </th>
+        }
+    </tr>
+
+    @if (ViewBag.Subjects != null)
+    {
+        List<Academy08._04.Models.Marks> dates = ViewBag.DataHeader;
+        foreach (Academy08._04.Models.User stud in ViewBag.Students as IEnumerable<Academy08._04.Models.User>)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(studItem => stud.FirstName) @Html.DisplayFor(studItem => stud.LastName)
+                </th>
+                @{
+                    IEnumerable<Academy08._04.Models.Marks> marks = Model.Where(m => m.StudentId == stud.Id).OrderBy(d => d.Date) as IEnumerable<Academy08._04.Models.Marks>;
+                    Academy08._04.Models.Marks mark = null;
+                    bool flag = false;
+                    double average = 0.0;
+                }
+                @for (int dateIndex = 0; dateIndex < dates.Count; dateIndex++)
+                {
+                    foreach (var checkMark in marks)
+                    {
+                        if (checkMark.Date == dates[dateIndex].Date)
+                        {
+                            flag = true;
+                            mark = checkMark;
+                            average += checkMark.Mark;
+                        }
+                    }
+                    if (flag)
+                    {
+                        flag = false;
+                        <td>
+                            @Html.DisplayFor(markItem => mark.Mark)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
+
+                }
+                @if (marks.Count() != 0)
+                {
+                    average = Math.Round(average / marks.Count(), 1);
+                }
+                <td>
+                    @average
+                </td>
+            </tr>
+        }
+    }
+</table>
+

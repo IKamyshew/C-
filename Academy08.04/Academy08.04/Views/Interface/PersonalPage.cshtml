@@ -18,9 +18,18 @@
         <td>
             @Html.ActionLink("Schedule", "Schedule")
         </td>
-        <td>
-            @Html.ActionLink("Marks", "Marks")
-        </td>
+        @if (HttpContext.Current.User.IsInRole("Student"))
+        {
+            <td>
+                @Html.ActionLink("Marks", "Marks")
+            </td>
+        }
+        @if (HttpContext.Current.User.IsInRole("Teacher"))
+        {
+            <td>
+                @Html.ActionLink("Marks", "MarksTeacher")
+            </td>
+        }
         <td>
             @Html.ActionLink("Log out", "LogOff", "Account", null, null)
         </td>
