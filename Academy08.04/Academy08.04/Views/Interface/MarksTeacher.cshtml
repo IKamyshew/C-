@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Academy08._04.Models.Marks>
+@{
     ViewBag.Title = "MarksTeacher";
 }
 
@@ -25,7 +26,14 @@
                 <td><p>Subject: </p></td>
                 <td> @Html.DropDownList("subject_filter", ViewBag.Subjects as SelectList)</td>
                 <td><input type="submit" value="Search" /> </td>
-                <td>@Html.ActionLink("Add marks to subject", "AddMarks")</td>
+                @{
+                    Academy08._04.Models.Group Group = ViewBag.Group as Academy08._04.Models.Group;
+                    Academy08._04.Models.Subject Subject = ViewBag.Subject as Academy08._04.Models.Subject;
+                    List<int> GroupsSubjects = new List<int>();
+                    GroupsSubjects.Add(Group.Id);
+                    GroupsSubjects.Add(Subject.id);
+                }
+                <td>@Html.ActionLink("Add marks to subject", "AddMark", GroupsSubjects)</td>
             </tr>
         </table>
     </form>
@@ -99,8 +107,13 @@
                 <td>
                     @average
                 </td>
+                
+               
             </tr>
         }
     }
 </table>
+
+
+
 

@@ -170,5 +170,47 @@ namespace Academy08._04.Controllers
             }
             return RedirectToAction("Groups");
         }
+
+        [HttpGet]
+        public ActionResult Subjects()
+        {
+            IEnumerable<Academy08._04.Models.Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = subjects;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Subjects(Subject subject)
+        {
+            bool flag = true;
+            foreach (var existedGroups in db.Subjects)
+            {
+                if (existedGroups.Name.Equals(subject.Name))
+                {
+                    flag = false;
+                }
+            }
+
+            if (flag)
+            {
+                db.Subjects.Add(subject);
+                db.SaveChanges();
+            }
+
+            IEnumerable<Academy08._04.Models.Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = subjects;
+            return View();
+        }
+
+        public ActionResult DeleteSubject(int id)
+        {
+            Subject subject = db.Subjects.Find(id);
+            if (subject != null)
+            {
+                db.Subjects.Remove(subject);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Subjects");
+        }
     }
 }

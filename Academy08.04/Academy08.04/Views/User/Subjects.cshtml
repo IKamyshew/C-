@@ -1,13 +1,13 @@
-﻿@model Group
+﻿@model Subject
 @using Academy08._04.Models
 @{
-    ViewBag.Title = "Groups";   
+    ViewBag.Title = "Subjects";
 }
 
 <table>
     <tr>
         <td>
-            <h2>Groups</h2>
+            <h2>Subjects</h2>
         </td>
         <td>
             @Html.ActionLink("Back to admin panel", "Index")
@@ -24,9 +24,9 @@
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
-    
+
     <fieldset>
-        <legend>New group</legend>
+        <legend>New subject</legend>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Name)
@@ -40,16 +40,16 @@
     </fieldset>
 }
 <table>
-    @if (ViewBag.Groups != null)
-    { 
+    @if (ViewBag.Subjects != null)
+    {
         int i = 0;
-        foreach (Group item in ViewBag.Groups as IEnumerable<Academy08._04.Models.Group>)
+        foreach (Subject item in ViewBag.Subjects as IEnumerable<Academy08._04.Models.Subject>)
         {
             i++;
             <tr>
                 <td>@i</td>
                 <td>@item.Name</td>
-                <td>@Html.ActionLink("Delete", "DeleteGroup", new {id=item.Id})</td>
+                <td>@Html.ActionLink("Delete", "DeleteSubject", new { id = item.id })</td>
             </tr>
         }
     }

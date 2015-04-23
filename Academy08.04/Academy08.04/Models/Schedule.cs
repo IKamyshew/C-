@@ -11,6 +11,7 @@ namespace Academy08._04.Models
     {
         [Key][Column(Order = 0)]
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         [Key][Column(Order = 1)]

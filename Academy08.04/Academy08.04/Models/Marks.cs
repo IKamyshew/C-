@@ -21,6 +21,7 @@ namespace Academy08._04.Models
 
         [Key]
         [Column(Order = 2)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         public int Mark { get; set; }

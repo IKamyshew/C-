@@ -44,6 +44,14 @@ namespace Academy08._04.Controllers
         [HttpPost]
         public ActionResult Schedule(DateTime date_filter)
         {
+            string userName = HttpContext.User.Identity.Name;
+            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+            User user = users.FirstOrDefault(i => i.Login == userName);
+
+            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
+            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+
             IEnumerable<Schedule> allSchedules = null;
             if (date_filter == null)
             {
@@ -52,12 +60,10 @@ namespace Academy08._04.Controllers
             else
             {
                 allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
-                               where schedulesDB.Date == date_filter
+                               where schedulesDB.Date == date_filter 
+                               where schedulesDB.GroupId == user.GroupId
                                select schedulesDB;
             }
-
-            List<Schedule> schedules = db.Schedule.ToList();
-            ViewBag.Dates = new SelectList(schedules, "Date", "Date");
 
             return View(allSchedules.OrderBy(u => u.Lesson).ToList());
         }
@@ -97,6 +103,7 @@ namespace Academy08._04.Controllers
             //View
             IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == 2).ToList();
             var marks = db.Marks.Where(s => s.SubjectId == 1).ToList();
+            ViewBag.StudentsFilter = new SelectList(students, "Id", "LastName");
             ViewBag.Students = students;
 
             List<Academy08._04.Models.Marks> dates = db.Marks.Where(s => s.SubjectId == 1).GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
@@ -112,6 +119,10 @@ namespace Academy08._04.Controllers
                 }
             }
             ViewBag.DataHeader = filteredDates;
+
+            //For new marks
+            ViewBag.Group = groups[2];
+            ViewBag.Subject = subjects[1];
 
             return View(marks);
         }
@@ -130,6 +141,7 @@ namespace Academy08._04.Controllers
             //View
             IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == group_filter).ToList();
             var marks = db.Marks.Where(s => s.SubjectId == subject_filter).ToList();
+            ViewBag.StudentsFilter = new SelectList(students, "Id", "LastName");
             ViewBag.Students = students;
 
             List<Academy08._04.Models.Marks> dates = db.Marks.Where(s => s.SubjectId == subject_filter).GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
@@ -147,22 +159,32 @@ namespace Academy08._04.Controllers
             }
             ViewBag.DataHeader = filteredDates;
 
+            //For new marks
+            ViewBag.Group = groups[group_filter];
+            ViewBag.Subject = subjects[subject_filter];
+
             return View(marks);
         }
 
         [Authorize(Roles = "Teacher")]
         [HttpGet]
-        public ActionResult AddMarks()
+        public ActionResult AddMark(List<int> GroupSubject)
         {
+            IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == GroupSubject[0]).ToList();
+
+            ViewBag.Students = new SelectList(students, "Id", "Name");
+            ViewBag.Marks = new SelectList(new List<int> {1, 2, 3, 4, 5}, "Id", "Name");
+            ViewBag.Subject = db.Subjects.Find(GroupSubject[1]);
+
             return View();
         }
 
-        [Authorize(Roles = "Teacher")]
+        /*[Authorize(Roles = "Teacher")]
         [HttpPost]
         public ActionResult AddMarks()
         {
-
             return RedirectToAction("MarksTeacher");
-        }
+        }*/
+
     }
 }

@@ -26,6 +26,9 @@
                 <td><p>Role: </p></td>
                 <td> @Html.DropDownList("role_filter", ViewBag.Roles as SelectList)</td>
                 <td><input type="submit" value="Search" /> </td>
+                @if (@HttpContext.Current.User.IsInRole("Manager")) { 
+                    <td>@Html.ActionLink("Manage subjects", "Subjects")</td>
+                }
             </tr>
         </table>
     </form>
