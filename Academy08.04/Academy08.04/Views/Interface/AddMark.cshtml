@@ -1,4 +1,5 @@
 ﻿@model Academy08._04.Models.Marks
+@{
     ViewBag.Title = "AddMark";
 }
 
@@ -15,8 +16,12 @@
             @Html.LabelFor(model => model.Subject.Name)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.StudentId.Equals(model.Subject.id))
-            @Html.ValidationMessageFor(model => model.SubjectId.Equals(model.Subject.id))
+            @{
+                Academy08._04.Models.Subject subject = ViewBag.Subject;
+                int subjId = subject.id;
+            }
+            @Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())*@
+            @*Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))*@
         </div>
 
         <div class="editor-label">
@@ -48,3 +53,6 @@
         </p>
     </fieldset>
     }
+@section Scripts {
+    @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
+}

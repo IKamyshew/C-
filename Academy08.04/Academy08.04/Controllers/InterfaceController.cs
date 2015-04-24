@@ -170,21 +170,39 @@ namespace Academy08._04.Controllers
         [HttpGet]
         public ActionResult AddMark(List<int> GroupSubject)
         {
-            IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == GroupSubject[0]).ToList();
+            int groupId;
+            int subjectId;
+            try {
+                groupId = GroupSubject[0];
+            } catch (NullReferenceException) {
+                groupId = 2;
+            }
+            try {
+                subjectId = GroupSubject[1];
+            } catch (NullReferenceException) {
+                subjectId = 1;
+            }
 
-            ViewBag.Students = new SelectList(students, "Id", "Name");
-            ViewBag.Marks = new SelectList(new List<int> {1, 2, 3, 4, 5}, "Id", "Name");
-            ViewBag.Subject = db.Subjects.Find(GroupSubject[1]);
+            IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == groupId).ToList();
+
+            ViewBag.Students = new SelectList(students, "Id", "LastName");
+            ViewBag.Marks = new SelectList(new List<int> {1, 2, 3, 4, 5}, "Id");
+            ViewBag.Subject = db.Subjects.Find(subjectId);
 
             return View();
         }
 
-        /*[Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "Teacher")]
         [HttpPost]
-        public ActionResult AddMarks()
+        public ActionResult AddMark(Marks mark)
         {
+            if (mark != null)
+            {
+                db.Marks.Add(mark);
+                db.SaveChanges();
+            }
             return RedirectToAction("MarksTeacher");
-        }*/
+        }
 
     }
 }
