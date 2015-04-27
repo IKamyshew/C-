@@ -15,27 +15,31 @@
 
 <form method="post" action="/Interface/AddMark">
     <input type="hidden" value="@subjId" name="SubjectId" />
-    <input type="hidden" value="@DateTime.Now" name="Date" />
     <fieldset>
         <table>
             <tr>
                 @Html.DropDownListFor(model => model.StudentId, ViewBag.Students as SelectList)
             </tr>
-
             <tr>
-                @Html.DropDownListFor(model => model.Mark, ViewBag.Marks as SelectList)
+                @Html.LabelFor(model => model.Date)
+            </tr>
+            <tr>
+                @Html.EditorFor(model => model.Date)
+                @Html.ValidationMessageFor(model => model.Date)
+            </tr>
+            <tr>
+                @Html.DropDownListFor(model => model.CurrentMark, ViewBag.Marks as SelectList)
             </tr>
 
         </table>
-        <input type="submit" value="Add" />
-     </fieldset>
+            <input type="submit" value="Add" />
+    </fieldset>
 </form>
 
 @section Scripts {
-     @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
+    @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
 }
-                @*Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())
-                @Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))
-                @Html.LabelFor(model => model.Mark)
-                @Html.EditorFor(model => model.Date)
-                @Html.ValidationMessageFor(model => model.Date)*@
+                    @*Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())
+                    @Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))
+                    
+                        *@

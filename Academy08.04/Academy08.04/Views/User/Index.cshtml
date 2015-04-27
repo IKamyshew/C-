@@ -29,6 +29,9 @@
                 @if (@HttpContext.Current.User.IsInRole("Manager")) { 
                     <td>@Html.ActionLink("Manage subjects", "Subjects")</td>
                 }
+                @if (HttpContext.Current.User.IsInRole("Teacher")) {
+                    <td>@Html.ActionLink("Manage groups", "GroupManager")</td>
+                }
             </tr>
         </table>
     </form>

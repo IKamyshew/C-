@@ -34,7 +34,7 @@ namespace Academy08._04.Models
 
         [Required]
         [Display(Name = "Role")]
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public Role Role { get; set; }
 
         [Display(Name = "Group")]

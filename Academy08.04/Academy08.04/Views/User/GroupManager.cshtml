@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Academy08._04.Models.User>
+
+@{
+    ViewBag.Title = "GroupManager";
+}
+
+<h2>Group Manager</h2>
+
+<form method="post" action="GroupManager">
+    <table>
+        <tr>
+            <td>
+                Group:
+            </td>
+            <td>
+                @Html.DropDownList("group_filter", ViewBag.Groups as SelectList)
+            </td>
+            <td>
+                <input type="submit" value="Filter"/> 
+            </td>
+        </tr>
+    </table>
+</form>
+
+<table>
+    <tr>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>Group</th>
+    </tr>
+    @foreach (var student in Model)
+    { 
+    <tr>
+        <td>@Html.DisplayFor(modelItem => student.FirstName)</td>
+        <td>@Html.DisplayFor(modelItem => student.LastName)</td>
+        <td>@Html.DropDownListFor(modelItem => student.GroupId, ViewBag.Groups as SelectList)</td>
+    </tr>
+    }
+</table>

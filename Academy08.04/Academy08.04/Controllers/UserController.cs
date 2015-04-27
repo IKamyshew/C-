@@ -212,5 +212,23 @@ namespace Academy08._04.Controllers
             }
             return RedirectToAction("Subjects");
         }
+
+        [HttpGet]
+        public ActionResult GroupManager()
+        {
+            IEnumerable<Group> groups = db.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            IEnumerable<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == 2).ToList();
+            ViewBag.Students = students;
+
+            return View(students);
+        }
+
+        [HttpPost]
+        public ActionResult GroupManager()
+        {
+            return View();
+        }
     }
 }

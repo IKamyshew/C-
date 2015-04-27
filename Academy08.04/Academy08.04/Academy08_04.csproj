@@ -217,6 +217,9 @@
   <ItemGroup>
     <Content Include="Views\Interface\AddMark.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\GroupManager.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

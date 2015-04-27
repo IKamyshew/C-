@@ -24,18 +24,7 @@ namespace Academy08._04.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        public int Mark { get; set; }
-
-        public Marks()
-        {}
-
-        public Marks(int StudentId)
-        {
-            this.StudentId = StudentId;
-            this.SubjectId = SubjectId;
-            this.Date = Date;
-            this.Mark = Mark;
-        }
+        public int CurrentMark { get; set; }
     }
 
 }

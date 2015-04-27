@@ -105,6 +105,7 @@
 
         }
     <tr>
+        @{finalAverage = Math.Round(finalAverage / averCounter, 1);}
         <th>
             Σ
         </th>
@@ -117,9 +118,9 @@
                     -
                 </th>
             }
-            <tr>
-                @Math.Round(finalAverage / averCounter, 1);
-            </tr>
+            <th>
+                @finalAverage
+            </th>
         }
     </tr>
 }

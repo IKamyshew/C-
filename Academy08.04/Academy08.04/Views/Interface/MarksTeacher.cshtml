@@ -52,6 +52,9 @@
 </form>
 
 <table border="1">
+@{
+    double finalAverage = 0;
+    int averCounter = 0;
     <tr>
         <th>
             Student
@@ -71,7 +74,7 @@
         }
     </tr>
 
-    @if (ViewBag.Subjects != null)
+    if (ViewBag.Subjects != null)
     {
         List<Academy08._04.Models.Marks> dates = ViewBag.DataHeader;
         foreach (Academy08._04.Models.User stud in ViewBag.Students as IEnumerable<Academy08._04.Models.User>)
@@ -94,14 +97,14 @@
                         {
                             flag = true;
                             mark = checkMark;
-                            average += checkMark.Mark;
+                            average += checkMark.CurrentMark;
                         }
                     }
                     if (flag)
                     {
                         flag = false;
                         <td>
-                            @Html.DisplayFor(markItem => mark.Mark)
+                            @Html.DisplayFor(markItem => mark.CurrentMark)
                         </td>
                     }
                     else
@@ -115,6 +118,8 @@
                 @if (marks.Count() != 0)
                 {
                     average = Math.Round(average / marks.Count(), 1);
+                    finalAverage += average;
+                    averCounter++;
                 }
                 <td>
                     @average
@@ -124,6 +129,26 @@
             </tr>
         }
     }
+    <tr>
+        @{finalAverage = Math.Round(finalAverage / averCounter, 1);}
+        <th>
+            Σ
+        </th>
+        @if (ViewBag.DataHeader != null)
+        {
+
+            foreach (var date in ViewBag.DataHeader as IEnumerable<Academy08._04.Models.Marks>)
+            {
+                <th>
+                    -
+                </th>
+            }
+            <th>
+                @finalAverage
+            </th>
+        }
+    </tr>
+}
 </table>
 
 
