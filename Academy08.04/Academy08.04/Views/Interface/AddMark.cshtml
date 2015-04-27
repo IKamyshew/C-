@@ -1,58 +1,41 @@
 ﻿@model Academy08._04.Models.Marks
+
 @{
     ViewBag.Title = "AddMark";
 }
 
 <h2>Add Mark</h2>
 
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary(true)
-
-    <fieldset>
-        <legend>New mark</legend>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Subject.Name)
-        </div>
-        <div class="editor-field">
-            @{
-                Academy08._04.Models.Subject subject = ViewBag.Subject;
-                int subjId = subject.id;
-            }
-            @Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())*@
-            @*Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))*@
-        </div>
-
-        <div class="editor-label">
-            Student
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.StudentId , ViewBag.Students as SelectList)
-            @Html.ValidationMessageFor(model => model.StudentId)
-        </div>
-    
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Date)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Date)
-            @Html.ValidationMessageFor(model => model.Date)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Mark)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.Mark, ViewBag.Marks as SelectList)
-            @Html.ValidationMessageFor(model => model.Mark)
-        </div>
-
-        <p>
-            <input type="submit" value="Add" />
-        </p>
-    </fieldset>
+<div>
+    @{
+    Academy08._04.Models.Subject subject = ViewBag.Subject;
+    int subjId = subject.id;
     }
+</div>
+
+<form method="post" action="/Interface/AddMark">
+    <input type="hidden" value="@subjId" name="SubjectId" />
+    <input type="hidden" value="@DateTime.Now" name="Date" />
+    <fieldset>
+        <table>
+            <tr>
+                @Html.DropDownListFor(model => model.StudentId, ViewBag.Students as SelectList)
+            </tr>
+
+            <tr>
+                @Html.DropDownListFor(model => model.Mark, ViewBag.Marks as SelectList)
+            </tr>
+
+        </table>
+        <input type="submit" value="Add" />
+     </fieldset>
+</form>
+
 @section Scripts {
-    @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
+     @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
 }
+                @*Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())
+                @Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))
+                @Html.LabelFor(model => model.Mark)
+                @Html.EditorFor(model => model.Date)
+                @Html.ValidationMessageFor(model => model.Date)*@

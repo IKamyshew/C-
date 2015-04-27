@@ -85,8 +85,47 @@ namespace Academy08._04.Controllers
             //getting header dates
             IEnumerable<Academy08._04.Models.Marks> dates = db.Marks.GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
             ViewBag.DataHeader = dates;
+            ViewBag.DataFilter = new SelectList(dates, "Date", "Date");
 
             return View(marks);
+        }
+
+        [Authorize(Roles = "Student")]
+        [HttpPost]
+        public ActionResult Marks(DateTime date_from, DateTime date_to)
+        {
+            //getting current user
+            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+            string userName = HttpContext.User.Identity.Name;
+            User user = users.FirstOrDefault(i => i.Login == userName);
+
+            // geting subjects
+            var subjects = db.Subjects.ToList();
+            ViewBag.Subjects = subjects;
+
+            //getting header dates
+            List<Academy08._04.Models.Marks> dates = db.Marks.GroupBy(d => d.Date).Select(date => date.FirstOrDefault()).ToList();
+            List<Academy08._04.Models.Marks> filteredDates = new List<Academy08._04.Models.Marks>();
+            foreach (Marks date in dates)
+            {
+                if (date.Date.CompareTo(date_from.Date) >= 0 && date.Date.CompareTo(date_to.Date) <= 0)
+                {
+                    filteredDates.Add(date);
+                }
+            }
+            ViewBag.DataHeader = filteredDates;
+            ViewBag.DataFilter = new SelectList(dates, "Date", "Date");
+
+            var marks = db.Marks.OrderBy(s => s.SubjectId).OrderBy(d => d.Date).ToList();
+            var filteredMarks = new List<Marks>();
+            foreach (Marks mark in marks)
+            {
+                if (mark.Date.CompareTo(date_from.Date) >= 0 && mark.Date.CompareTo(date_to.Date) <= 0)
+                {
+                    filteredMarks.Add(mark);
+                }
+            }
+            return View(filteredMarks);
         }
 
         [Authorize(Roles = "Teacher")]
@@ -119,6 +158,7 @@ namespace Academy08._04.Controllers
                 }
             }
             ViewBag.DataHeader = filteredDates;
+            ViewBag.DataFilter = new SelectList(filteredDates, "Date", "Date");
 
             //For new marks
             ViewBag.Group = groups[2];
@@ -129,8 +169,16 @@ namespace Academy08._04.Controllers
 
         [Authorize(Roles = "Teacher")]
         [HttpPost]
-        public ActionResult MarksTeacher(int group_filter, int subject_filter)
+        public ActionResult MarksTeacher(int? group_filter, int? subject_filter, DateTime? date_from, DateTime? date_to)
         {
+            if (group_filter == null)
+                group_filter = 2;
+            if (subject_filter == null)
+                subject_filter = 1;
+            if (date_from == null)
+                date_from = DateTime.MinValue;
+            if (date_to == null)
+                date_to = DateTime.MaxValue;
             //Filter
             List<Group> groups = db.Groups.ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
@@ -148,20 +196,26 @@ namespace Academy08._04.Controllers
             List<Academy08._04.Models.Marks> filteredDates = new List<Academy08._04.Models.Marks>();
             foreach (var date in dates)
             {
-                foreach (var student in students)
+                if (date.Date.CompareTo(date_from) >= 0 && date.Date.CompareTo(date_to) <= 0)
                 {
-                    if (date.StudentId == student.Id)
+                    foreach (var student in students)
                     {
-                        filteredDates.Add(date);
-                        break;
+                        if (date.StudentId == student.Id)
+                        {
+                            filteredDates.Add(date);
+                            break;
+                        }
                     }
                 }
             }
+
+
             ViewBag.DataHeader = filteredDates;
+            ViewBag.DataFilter = new SelectList(filteredDates, "Date", "Date");
 
             //For new marks
-            ViewBag.Group = groups[group_filter];
-            ViewBag.Subject = subjects[subject_filter];
+            ViewBag.Group = groups[(int)group_filter];
+            ViewBag.Subject = subjects[(int)subject_filter];
 
             return View(marks);
         }
@@ -186,7 +240,7 @@ namespace Academy08._04.Controllers
             IEnumerable<Academy08._04.Models.User> students = db.Users.Where(r => r.RoleId == 3).Where(g => g.GroupId == groupId).ToList();
 
             ViewBag.Students = new SelectList(students, "Id", "LastName");
-            ViewBag.Marks = new SelectList(new List<int> {1, 2, 3, 4, 5}, "Id");
+            ViewBag.Marks = new SelectList(new List<int> { 1, 2, 3, 4, 5 }, "Mark");
             ViewBag.Subject = db.Subjects.Find(subjectId);
 
             return View();

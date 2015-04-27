@@ -12,11 +12,11 @@ namespace Academy08._04.Models
     {
         [Key]
         [Column(Order = 0)]
-        public int? StudentId { get; set; }
+        public int StudentId { get; set; }
 
         [Key]
         [Column(Order = 1)]
-        public int? SubjectId { get; set; }
+        public int SubjectId { get; set; }
         public Subject Subject { get; set; }
 
         [Key]
@@ -25,6 +25,17 @@ namespace Academy08._04.Models
         public DateTime Date { get; set; }
 
         public int Mark { get; set; }
+
+        public Marks()
+        {}
+
+        public Marks(int StudentId)
+        {
+            this.StudentId = StudentId;
+            this.SubjectId = SubjectId;
+            this.Date = Date;
+            this.Mark = Mark;
+        }
     }
 
 }

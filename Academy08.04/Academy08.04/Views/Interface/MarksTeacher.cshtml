@@ -39,6 +39,18 @@
     </form>
 </div>
 
+<form method="post" action="MarksTeacher">
+    <table>
+        <tr>
+            <td>From: </td>
+            <td>@Html.DropDownList("date_from", ViewBag.DataFilter as SelectList)</td>
+            <td>to: </td>
+            <td>@Html.DropDownList("date_to", ViewBag.DataFilter as SelectList)</td>
+            <td><input type="submit" value="Filter" /> </td>
+        </tr>
+    </table>
+</form>
+
 <table border="1">
     <tr>
         <th>
