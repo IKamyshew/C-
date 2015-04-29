@@ -1,0 +1,118 @@
+﻿@model Academy08._04.Models.ScheduleView
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ScheduleManager</title>
+</head>
+<body>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <h2>Schedule</h2>
+                </td>
+                <td>
+                    @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+                </td>
+                <td>
+                    @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            @using (Html.BeginForm()) 
+            {
+                <table>
+                    <tr>
+                        <td>Date: </td>
+                        <td>@Html.DropDownList("date_filter", ViewBag.Dates as SelectList)</td>
+                        <td>@Html.DropDownList("group_filter", ViewBag.Groups as SelectList)</td>
+                        <td><input type="submit" value="Search" /></td>
+                    </tr>
+                </table>
+            }
+        </div>
+
+        <table border="1" cellspacing="0" cellpadding="0">
+            <tr>
+                <th width="10">
+                    Lesson
+                </th>
+                <th width="15">
+                    Classroom
+                </th>
+                <th width="50">
+                    Subject
+                </th>
+            </tr>
+
+            @for (int i = 0; i < Model.schedules.Count; i++)
+            {
+                <tr>
+                    <td width="10">
+                        @Html.DisplayFor(modelItem => Model.schedules[i].Lesson)
+                    </td>
+                    <td width="15">
+                        @Html.DisplayFor(modelItem => Model.schedules[i].Classroom)
+                    </td>
+                    <td width="50">
+                        @Html.DisplayFor(modelItem => Model.schedules[i].Subject.Name)
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @using (Html.BeginForm("addSchedules", "Interface"))
+        {
+            System.Web.Mvc.MvcHtmlString date = Html.EditorFor(modelItem => Model.date);
+            for (int i = 0; i < Model.schedules.Count; i++)
+            {
+                Html.HiddenFor(modelItem => Model.schedules[i].Date, date);
+            }
+            <table border="1" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th width="10">
+                        Lesson
+                    </th>
+                    <th width="15">
+                        Classroom
+                    </th>
+                    <th width="50">
+                        Subject
+                    </th>
+                </tr>
+
+
+                @for (int i = 0; i < Model.schedules.Count; i++)
+                {
+                    <tr>
+                        <td width="10">
+                            @Html.HiddenFor(modelItem => Model.schedules[i].Lesson, i + 1)
+                            @Html.DisplayFor(modelItem => Model.schedules[i].Lesson)
+                        </td>
+                        <td width="15">
+                            @Html.EditorFor(modelItem => Model.schedules[i].Classroom)
+                        </td>
+                        <td width="50">
+                            @Html.DropDownListFor(model => model.schedules[i].Subject.Id, ViewBag.Subjects as SelectList)
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                </tr>
+
+            </table>
+        <input type="submit" value="Save new schedule" />
+        }
+    </div>
+</body>
+</html>

@@ -32,12 +32,22 @@ namespace Academy08._04.Controllers
             string userName = HttpContext.User.Identity.Name;
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             User user = users.FirstOrDefault(i => i.Login == userName);
+            DateTime date_filter = db.Schedule.ToList().FirstOrDefault().Date;
 
-            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
-            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            List<Schedule> scheduleByDate = db.Schedule.Include(s => s.Subject).Where(d => d.Date == date_filter).Where(gr => gr.GroupId == user.GroupId).ToList();
+            ScheduleView ScheduleView = new ScheduleView(date_filter, user.GroupId, scheduleByDate);
+            
+
+            IEnumerable<Schedule> allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
+                                                 where schedulesDB.Date == date_filter
+                                                 where schedulesDB.GroupId == user.GroupId
+                                                 select schedulesDB;
+
+            List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId)
+                                                     .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
             ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
 
-            return View(schedule);
+            return View(ScheduleView);
         }
 
         [Authorize]
@@ -66,6 +76,71 @@ namespace Academy08._04.Controllers
             }
 
             return View(allSchedules.OrderBy(u => u.Lesson).ToList());
+        }
+
+        [Authorize(Roles="Manager")]
+        [HttpGet]
+        public ActionResult ScheduleManager()
+        {
+            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            List<Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+
+            int group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
+            DateTime date_filter = db.Schedule.ToList().FirstOrDefault().Date;
+
+            List<Schedule> scheduleByDate = new List<Schedule>(8);
+            scheduleByDate = db.Schedule.Include(s => s.Subject).Where(d => d.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            ScheduleView ScheduleView = new ScheduleView(date_filter, group_filter, scheduleByDate);
+
+            /*IEnumerable<Schedule> allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
+                           where schedulesDB.Date == date_filter
+                           where schedulesDB.GroupId == group_filter
+                           select schedulesDB;
+            */
+
+            List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter)
+                                                     .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+
+            return View(ScheduleView);
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpPost]
+        public ActionResult ScheduleManager(DateTime? date_filter, int? group_filter)
+        {
+            if(group_filter == null)
+            {
+                group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
+            }
+
+            IEnumerable<Schedule> allSchedules = null;
+            if (date_filter == null)
+            {
+                date_filter = (DateTime?)db.Schedule.ToList().FirstOrDefault().Date;
+            }
+            
+            allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
+                           where schedulesDB.Date == date_filter
+                           where schedulesDB.GroupId == group_filter
+                           select schedulesDB;
+
+            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter).ToList();
+            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+
+            return View(allSchedules.OrderBy(u => u.Lesson).ToList());
+        }
+
+        public ActionResult addSchedules(ScheduleView sv)
+        {
+            return RedirectToAction("ScheduleManager");
         }
 
         [Authorize(Roles = "Student")]
@@ -133,7 +208,7 @@ namespace Academy08._04.Controllers
         public ActionResult MarksTeacher()
         {
             //Filter
-            List<Group> groups = db.Groups.ToList();
+            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
             List<Subject> subjects = db.Subjects.ToList();
@@ -161,7 +236,7 @@ namespace Academy08._04.Controllers
             ViewBag.DataFilter = new SelectList(filteredDates, "Date", "Date");
 
             //For new marks
-            ViewBag.Group = groups[2];
+            ViewBag.Group = groups[1];
             ViewBag.Subject = subjects[1];
 
             return View(marks);
@@ -180,7 +255,7 @@ namespace Academy08._04.Controllers
             if (date_to == null)
                 date_to = DateTime.MaxValue;
             //Filter
-            List<Group> groups = db.Groups.ToList();
+            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
             List<Subject> subjects = db.Subjects.ToList();
@@ -211,11 +286,11 @@ namespace Academy08._04.Controllers
 
 
             ViewBag.DataHeader = filteredDates;
-            ViewBag.DataFilter = new SelectList(filteredDates, "Date", "Date");
+            ViewBag.DataFilter = new SelectList(dates, "Date", "Date");
 
             //For new marks
-            ViewBag.Group = groups[(int)group_filter];
-            ViewBag.Subject = subjects[(int)subject_filter];
+            ViewBag.Group = db.Groups.Find(group_filter);
+            ViewBag.Subject = db.Subjects.Find(subject_filter);
 
             return View(marks);
         }
@@ -250,7 +325,7 @@ namespace Academy08._04.Controllers
         [HttpPost]
         public ActionResult AddMark(Marks mark)
         {
-            if (mark != null)
+            if (ModelState.IsValid)
             {
                 db.Marks.Add(mark);
                 db.SaveChanges();
