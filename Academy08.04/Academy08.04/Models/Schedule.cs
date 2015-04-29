@@ -19,7 +19,7 @@ namespace Academy08._04.Models
         public int Lesson { get; set; }
 
         [Key][Column(Order = 2)]
-        public int? GroupId { get; set; }
+        public int GroupId { get; set; }
         public Group Group { get; set; }
 
         public int? SubjectId { get; set; }

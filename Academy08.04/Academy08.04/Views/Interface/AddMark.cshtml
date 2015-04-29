@@ -9,37 +9,43 @@
 <div>
     @{
     Academy08._04.Models.Subject subject = ViewBag.Subject;
-    int subjId = subject.id;
+    int subjId = subject.Id;
     }
 </div>
 
-<form method="post" action="/Interface/AddMark">
+@using (Html.BeginForm()) { 
+    @Html.ValidationSummary(true)
     <input type="hidden" value="@subjId" name="SubjectId" />
     <fieldset>
         <table>
             <tr>
-                @Html.DropDownListFor(model => model.StudentId, ViewBag.Students as SelectList)
+                <td>
+                    @Html.DropDownListFor(model => model.StudentId, ViewBag.Students as SelectList)
+                </td>
             </tr>
             <tr>
-                @Html.LabelFor(model => model.Date)
+                <td>
+                    @Html.LabelFor(model => model.Date)
+                </td>
             </tr>
             <tr>
-                @Html.EditorFor(model => model.Date)
-                @Html.ValidationMessageFor(model => model.Date)
+                <td>
+                    @Html.EditorFor(model => model.Date)
+                    @Html.ValidationMessageFor(model => model.Date)
+                </td>
             </tr>
             <tr>
-                @Html.DropDownListFor(model => model.CurrentMark, ViewBag.Marks as SelectList)
+                <td>
+                    @Html.DropDownListFor(model => model.CurrentMark, ViewBag.Marks as SelectList)
+                </td>
             </tr>
 
         </table>
             <input type="submit" value="Add" />
     </fieldset>
-</form>
+}
 
 @section Scripts {
     @System.Web.Optimization.Scripts.Render("~/bundles/jqueryval")
 }
-                    @*Html.Hidden("SubjectId", subjId)   @*.EditorFor(model => model.SubjectId.Equals())
-                    @Html.ValidationMessageFor(model => model.SubjectId.Equals(subjId))
-                    
-                        *@
+

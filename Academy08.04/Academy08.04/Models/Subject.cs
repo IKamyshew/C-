@@ -7,7 +7,7 @@ namespace Academy08._04.Models
 {
     public class Subject
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
     }

@@ -16,7 +16,9 @@
         </td>
         }
         <td>
-            @Html.ActionLink("Schedule", "Schedule")
+            @if (HttpContext.Current.User.IsInRole("Manager")) 
+            { @Html.ActionLink("Schedule", "ScheduleManager") } 
+            else { @Html.ActionLink("Schedule", "Schedule") }
         </td>
         @if (HttpContext.Current.User.IsInRole("Student"))
         {

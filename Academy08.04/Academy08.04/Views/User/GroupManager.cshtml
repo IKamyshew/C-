@@ -38,6 +38,7 @@
         <td>@Html.DisplayFor(modelItem => student.FirstName)</td>
         <td>@Html.DisplayFor(modelItem => student.LastName)</td>
         <td>@Html.DropDownListFor(modelItem => student.GroupId, ViewBag.Groups as SelectList)</td>
+        <td><input type="submit" value="Change group"/></td>
     </tr>
     }
 </table>

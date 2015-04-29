@@ -60,7 +60,7 @@
                         @Html.DisplayFor(subjItem => subj.Name)
                     </th>
                     @{
-                IEnumerable<Academy08._04.Models.Marks> marks = Model.Where(m => m.SubjectId == subj.id).OrderBy(d => d.Date) as IEnumerable<Academy08._04.Models.Marks>;
+                IEnumerable<Academy08._04.Models.Marks> marks = Model.Where(m => m.SubjectId == subj.Id).OrderBy(d => d.Date) as IEnumerable<Academy08._04.Models.Marks>;
                         Academy08._04.Models.Marks mark = null;
                         bool flag = false;
                         double average = 0.0;
@@ -73,14 +73,14 @@
                             {
                                 flag = true;
                                 mark = checkMark;
-                                average+= checkMark.Mark;
+                                average+= checkMark.CurrentMark;
                             }
                         }
                         if (flag)
                         {
                             flag = false;
                             <td>
-                                @Html.DisplayFor(markItem => mark.Mark)
+                                @Html.DisplayFor(markItem => mark.CurrentMark)
                             </td>
                         }
                         else

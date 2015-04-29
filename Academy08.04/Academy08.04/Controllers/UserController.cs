@@ -85,8 +85,12 @@ namespace Academy08._04.Controllers
         [Authorize(Roles="Manager")]
         public ActionResult Create(User user)
         {
-            db.Users.Add(user);
-            db.SaveChanges();
+            if (ModelState.IsValid) 
+            { 
+                db.Users.Add(user);
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -214,9 +218,10 @@ namespace Academy08._04.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Teacher")]
         public ActionResult GroupManager()
         {
-            IEnumerable<Group> groups = db.Groups.ToList();
+            IEnumerable<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
             IEnumerable<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == 2).ToList();
@@ -226,9 +231,25 @@ namespace Academy08._04.Controllers
         }
 
         [HttpPost]
-        public ActionResult GroupManager()
+        [Authorize(Roles = "Teacher")]
+        public ActionResult GroupManager(int group_filter)
         {
-            return View();
+            if (group_filter == null)
+            {
+                group_filter = 2;
+            }
+            IEnumerable<Group> groups = db.Groups.ToList();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+            IEnumerable<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == group_filter).ToList();
+            ViewBag.Students = students;
+
+            return View(students);
+        }
+
+        public ActionResult ChangeGroup()
+        {
+            return RedirectToAction("GroupManager");
         }
     }
 }
