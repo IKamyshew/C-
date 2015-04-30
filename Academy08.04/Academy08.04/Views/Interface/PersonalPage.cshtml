@@ -6,9 +6,6 @@
 
 <table>
     <tr>
-        <td>
-            <h2>Personal Page</h2>
-        </td>
         @if (HttpContext.Current.User.IsInRole("Manager") || HttpContext.Current.User.IsInRole("Teacher"))
         {       
         <td>
@@ -37,6 +34,8 @@
         </td>
     </tr>
 </table>
+
+<h2>Personal Page</h2>
 
 <table>
     <tr>

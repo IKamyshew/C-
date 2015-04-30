@@ -222,33 +222,39 @@ namespace Academy08._04.Controllers
         public ActionResult GroupManager()
         {
             IEnumerable<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
-            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+            ViewBag.Groups = new SelectList(groups, "Id", "Name", 2);
 
-            IEnumerable<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == 2).ToList();
-            ViewBag.Students = students;
+            List<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == 2).ToList();
 
             return View(students);
         }
 
         [HttpPost]
         [Authorize(Roles = "Teacher")]
-        public ActionResult GroupManager(int group_filter)
+        public ActionResult GroupManager(int? group_filter)
         {
             if (group_filter == null)
             {
                 group_filter = 2;
             }
-            IEnumerable<Group> groups = db.Groups.ToList();
+            IEnumerable<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
-            IEnumerable<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == group_filter).ToList();
-            ViewBag.Students = students;
+            List<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == group_filter).ToList();
 
             return View(students);
         }
 
-        public ActionResult ChangeGroup()
+        public ActionResult ChangeGroup(List<User> updatedStudents)
         {
+            foreach (User student in updatedStudents)
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Entry(student).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
             return RedirectToAction("GroupManager");
         }
     }

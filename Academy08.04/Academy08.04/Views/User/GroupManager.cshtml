@@ -1,8 +1,22 @@
-﻿@model IEnumerable<Academy08._04.Models.User>
+﻿@model List<Academy08._04.Models.User>
 
 @{
     ViewBag.Title = "GroupManager";
 }
+
+<table>
+    <tr>
+        <td>
+            @Html.ActionLink("Back to admin panel", "Index")
+        </td>
+        <td>
+            @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
+        </td>
+        <td>
+            @Html.ActionLink("Log out", "LogOff", "Account", null, null)
+        </td>
+    </tr>
+</table>
 
 <h2>Group Manager</h2>
 
@@ -22,6 +36,7 @@
     </table>
 </form>
 
+@using (Html.BeginForm("ChangeGroup","User")) { 
 <table>
     <tr>
         <th>
@@ -32,13 +47,23 @@
         </th>
         <th>Group</th>
     </tr>
-    @foreach (var student in Model)
-    { 
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        @Html.HiddenFor(modelItem => Model[i].Id, Model[i].Id);
+        @Html.HiddenFor(modelItem => Model[i].FirstName, Model[i].FirstName);
+        @Html.HiddenFor(modelItem => Model[i].LastName, Model[i].LastName);
+        @Html.HiddenFor(modelItem => Model[i].Login);
+        @Html.HiddenFor(modelItem => Model[i].Password);
+        @Html.HiddenFor(modelItem => Model[i].RoleId, Model[i].RoleId);
     <tr>
-        <td>@Html.DisplayFor(modelItem => student.FirstName)</td>
-        <td>@Html.DisplayFor(modelItem => student.LastName)</td>
-        <td>@Html.DropDownListFor(modelItem => student.GroupId, ViewBag.Groups as SelectList)</td>
-        <td><input type="submit" value="Change group"/></td>
+        <td>@Html.DisplayFor(modelItem => Model[i].FirstName)</td>
+        <td>@Html.DisplayFor(modelItem => Model[i].LastName)</td>
+        <td>@Html.DropDownListFor(modelItem => Model[i].GroupId, ViewBag.Groups as SelectList)</td>
     </tr>
     }
+    <tr>
+        <td><input type="submit" value="Change group"/></td>
+    </tr>
 </table>
+}

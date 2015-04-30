@@ -27,5 +27,7 @@ namespace Academy08._04.Models
 
         public int Classroom { get; set; }
 
+        public readonly static  int MaxLessonsPerDay = 8;
+
     }
 }

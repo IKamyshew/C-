@@ -6,9 +6,6 @@
 <table>
     <tr>
         <td>
-            <h2>Marks</h2>
-        </td>
-        <td>
             @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
         </td>
         <td>
@@ -16,6 +13,8 @@
         </td>
     </tr>
 </table>
+            
+<h2>Marks</h2>
 
 <div>
     <form method="post" action="/Interface/MarksTeacher">
@@ -31,7 +30,7 @@
                     Academy08._04.Models.Subject Subject = ViewBag.Subject as Academy08._04.Models.Subject;
                     List<int> GroupsSubjects = new List<int>();
                     GroupsSubjects.Add(Group.Id);
-                    GroupsSubjects.Add(Subject.id);
+                    GroupsSubjects.Add(Subject.Id);
                 }
                 <td>@Html.ActionLink("Add marks to subject", "AddMark", GroupsSubjects)</td>
             </tr>

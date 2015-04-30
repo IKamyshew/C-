@@ -7,10 +7,7 @@
 <table>
     <tr>
         <td>
-            <h2>Groups</h2>
-        </td>
-        <td>
-            @Html.ActionLink("Back to admin panel", "Index")
+            @Html.ActionLink("Back", "Index")
         </td>
         <td>
             @Html.ActionLink("To personal page", "PersonalPage", "Interface", null, null)
@@ -20,6 +17,8 @@
         </td>
     </tr>
 </table>
+            
+<h2>Groups</h2>
 
 @using (Html.BeginForm())
 {

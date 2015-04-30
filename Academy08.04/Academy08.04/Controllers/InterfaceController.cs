@@ -82,30 +82,47 @@ namespace Academy08._04.Controllers
         [HttpGet]
         public ActionResult ScheduleManager()
         {
+            //get groups
             List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
+            //get subjects
             List<Subject> subjects = db.Subjects.ToList();
             ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
 
+            //get first group and date for view
             int group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
             DateTime date_filter = db.Schedule.ToList().FirstOrDefault().Date;
 
-            List<Schedule> scheduleByDate = new List<Schedule>(8);
-            scheduleByDate = db.Schedule.Include(s => s.Subject).Where(d => d.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
-            ScheduleView ScheduleView = new ScheduleView(date_filter, group_filter, scheduleByDate);
-
-            /*IEnumerable<Schedule> allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
-                           where schedulesDB.Date == date_filter
-                           where schedulesDB.GroupId == group_filter
-                           select schedulesDB;
-            */
-
+            //get dates
             List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter)
                                                      .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
             ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+            ViewBag.CurrentGroup = group_filter;
+           
+            // get model
+            List<Schedule> ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            if (ScheduleList.Count < Academy08._04.Models.Schedule.MaxLessonsPerDay)
+            {
+                for (int i = 0; i < Academy08._04.Models.Schedule.MaxLessonsPerDay; i++ )
+                    try
+                    {
+                        bool check = ScheduleList[i].Lesson == i+1;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        ScheduleList.Add(new Schedule());
+                        ScheduleList[i].Date = date_filter;
+                        ScheduleList[i].GroupId = group_filter;
+                        ScheduleList[i].Lesson = i + 1;
+                        ScheduleList[i].SubjectId = 13;
+                        db.Entry(ScheduleList[i]).State = EntityState.Added;
+                        db.SaveChanges();
+                    }
+                ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            }
 
-            return View(ScheduleView);
+            return View(ScheduleList);
         }
 
         [Authorize(Roles = "Manager")]
@@ -116,29 +133,47 @@ namespace Academy08._04.Controllers
             {
                 group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
             }
-
-            IEnumerable<Schedule> allSchedules = null;
             if (date_filter == null)
             {
                 date_filter = (DateTime?)db.Schedule.ToList().FirstOrDefault().Date;
             }
-            
-            allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
-                           where schedulesDB.Date == date_filter
-                           where schedulesDB.GroupId == group_filter
-                           select schedulesDB;
 
             List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
+            ViewBag.CurrentGroup = group_filter;
 
-            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter).ToList();
-            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
+            List<Subject> subjects = db.Subjects.ToList();
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+
+            List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter)
+                                                     .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
             ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
 
-            return View(allSchedules.OrderBy(u => u.Lesson).ToList());
+            List<Schedule> ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            if (ScheduleList.Count < Academy08._04.Models.Schedule.MaxLessonsPerDay)
+            {
+                for (int i = 0; i < Academy08._04.Models.Schedule.MaxLessonsPerDay; i++)
+                    try
+                    {
+                        bool check = ScheduleList[i].Lesson == i + 1;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        ScheduleList.Add(new Schedule());
+                        ScheduleList[i].Date = (DateTime) date_filter;
+                        ScheduleList[i].GroupId = (int) group_filter;
+                        ScheduleList[i].Lesson = i + 1;
+                        ScheduleList[i].SubjectId = 13;
+                        db.Entry(ScheduleList[i]).State = EntityState.Added;
+                        db.SaveChanges();
+                    }
+                ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            }
+
+            return View(ScheduleList.OrderBy(u => u.Lesson).ToList());
         }
 
-        public ActionResult addSchedules(ScheduleView sv)
+        public ActionResult addSchedules(List<Schedule> sl)
         {
             return RedirectToAction("ScheduleManager");
         }
