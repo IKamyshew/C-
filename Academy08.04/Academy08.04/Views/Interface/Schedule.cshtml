@@ -1,4 +1,4 @@
-﻿@model Academy08._04.Models.ScheduleView
+﻿@model List<Academy08._04.Models.Schedule>
 @{
     ViewBag.Title = "Shedule";
 }
@@ -28,47 +28,31 @@
     </form>
 </div>
 
-<table border="1">
+<table border="1" cellspacing="0" cellpadding="0">
     <tr>
-        <th width="10">
+        <th width="10" align="center">
             Lesson
         </th>
-        <th width="15">
+        <th width="173" align="center">
             Classroom
         </th>
-        <th width="50">
+        <th width="200" align="center">
             Subject
         </th>
     </tr>
 
-    @for (int i = 0; i < Model.schedules.Count; i++)
+    @for (int i = 0; i < Model.Count(); i++)
     {
         <tr>
             <td width="10">
-                @Html.DisplayFor(modelItem => Model.schedules[i].Lesson)
+                @Html.DisplayFor(modelItem => Model[i].Lesson)
             </td>
             <td width="15">
-                @Html.DisplayFor(modelItem => Model.schedules[i].Classroom)
+                @Html.DisplayFor(modelItem => Model[i].Classroom)
             </td>
             <td width="50">
-                @Html.DisplayFor(modelItem => Model.schedules[i].Subject.Name)
+                @Html.DisplayFor(modelItem => Model[i].Subject.Name)
             </td>
         </tr>
     }
 </table>
-
-
-        @*foreach (var item in Model)
-            {
-                <tr>
-                    <td width="10">
-                        @Html.DisplayFor(modelItem => item.Lesson)
-                    </td>
-                    <td width="15">
-                        @Html.DisplayFor(modelItem => item.Classroom)
-                    </td>
-                    <td width="50">
-                        @Html.DisplayFor(modelItem => item.Subject.Name)
-                    </td>
-                </tr>
-            }*@

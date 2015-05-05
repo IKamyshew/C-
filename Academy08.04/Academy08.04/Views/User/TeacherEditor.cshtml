@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "TeacherEditor";
+}
+
+<table>
+    <tr>
+        <td>
+            @Html.ActionLink("Back", "GroupManager")
+        </td>
+    </tr>
+</table>
+
+<h2>TeacherEditor</h2>
+
+<table>
+    <tr>
+        <th>
+            Group name: 
+        </th>
+        <td>
+            @{
+                String name = ((Academy08._04.Models.Group)Session["group"]).Name;
+            }
+            @name
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Teachers:
+        </th>
+         @if (ViewBag.GroupTeachers != null) {
+            foreach(var teacher in ViewBag.GroupTeachersView) {
+                String str = teacher.FirstName + " " + teacher.LastName + ";";
+                <td>@str</td>
+            }
+         }
+    </tr>
+    <tr>
+        @if (ViewBag.Teachers != null)
+        {
+            using (Html.BeginForm()) 
+            { 
+            <td>
+                @Html.DropDownList("add_filter", ViewBag.Teachers as SelectList)
+            </td>
+            <td>
+                <input type="submit" value="Add"/>
+            </td>
+            }
+        }
+    </tr>
+    <tr>
+        @if (ViewBag.GroupTeachers != null)
+        {
+            using (Html.BeginForm())
+            {
+            <td>
+                @Html.DropDownList("remove_filter", ViewBag.GroupTeachers as SelectList)
+            </td>
+            <td>
+                <input type="submit" value="Remove" />
+            </td>
+            }
+        }
+    </tr>
+</table>

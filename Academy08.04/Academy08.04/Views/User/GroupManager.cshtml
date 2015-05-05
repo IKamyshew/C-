@@ -36,8 +36,24 @@
     </table>
 </form>
 
-@using (Html.BeginForm("ChangeGroup","User")) { 
 <table>
+    <tr>
+        <th>Teachers: </th>
+        @if (ViewBag.Teachers != null) { 
+            foreach (Academy08._04.Models.TeachersGroups teacher in ViewBag.Teachers as List<Academy08._04.Models.TeachersGroups>)
+            {
+                String str = teacher.Teacher.FirstName + " " + teacher.Teacher.LastName + ";";
+                <td>@str</td>
+            }
+        } else {
+           <td>teachers are absent;</td>
+        }
+        <td>@Html.ActionLink("Edit", "TeacherEditor")</td>
+</tr>
+</table>
+
+@using (Html.BeginForm("ChangeGroup","User")) { 
+<table border="1">
     <tr>
         <th>
             First Name

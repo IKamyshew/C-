@@ -25,42 +25,46 @@ namespace Academy08._04.Controllers
             return View(user);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Student")]
         [HttpGet]
         public ActionResult Schedule()
         {
+            //get cuttent user
             string userName = HttpContext.User.Identity.Name;
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             User user = users.FirstOrDefault(i => i.Login == userName);
-            DateTime date_filter = db.Schedule.ToList().FirstOrDefault().Date;
 
+            //date for this view
+            DateTime date_filter = db.Schedule.FirstOrDefault().Date;
+
+            //getting schedule
             List<Schedule> scheduleByDate = db.Schedule.Include(s => s.Subject).Where(d => d.Date == date_filter).Where(gr => gr.GroupId == user.GroupId).ToList();
-            ScheduleView ScheduleView = new ScheduleView(date_filter, user.GroupId, scheduleByDate);
             
-
-            IEnumerable<Schedule> allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
-                                                 where schedulesDB.Date == date_filter
-                                                 where schedulesDB.GroupId == user.GroupId
-                                                 select schedulesDB;
-
+            //date filter
             List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId)
                                                      .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
             ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
 
-            return View(ScheduleView);
+            return View(scheduleByDate);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Student")]
         [HttpPost]
         public ActionResult Schedule(DateTime date_filter)
         {
+            //get cuttent user
             string userName = HttpContext.User.Identity.Name;
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             User user = users.FirstOrDefault(i => i.Login == userName);
 
-            List<Schedule> schedule = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId).ToList();
-            List<Schedule> scheduleDate = schedule.GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
-            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
+            //date filter
+            List<Schedule> schedule = db.Schedule.Include(s => s.Subject)
+                                                  .Where(g => g.GroupId == user.GroupId)
+                                                  .GroupBy(d => d.Date)
+                                                  .Select(day => day.FirstOrDefault())
+                                                  .ToList();
+
+            ViewBag.Dates = new SelectList(schedule, "Date", "Date");
 
             IEnumerable<Schedule> allSchedules = null;
             if (date_filter == null)
@@ -78,7 +82,7 @@ namespace Academy08._04.Controllers
             return View(allSchedules.OrderBy(u => u.Lesson).ToList());
         }
 
-        [Authorize(Roles="Manager")]
+        [Authorize(Roles = "Manager, Teacher")]
         [HttpGet]
         public ActionResult ScheduleManager()
         {
@@ -125,7 +129,7 @@ namespace Academy08._04.Controllers
             return View(ScheduleList);
         }
 
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager, Teacher")]
         [HttpPost]
         public ActionResult ScheduleManager(DateTime? date_filter, int? group_filter)
         {
@@ -175,6 +179,37 @@ namespace Academy08._04.Controllers
 
         public ActionResult addSchedules(List<Schedule> sl)
         {
+            bool flag = false;
+            int group = sl[0].GroupId;
+            DateTime date = sl[0].Date;
+            List<Schedule> modifiedEntities = new List<Schedule>(8);
+
+            List<Schedule> schedules = db.Schedule.GroupBy(d => d.Date).Select(e => e.FirstOrDefault()).ToList();
+
+            foreach (var schedule in schedules)
+            {
+                if (schedule.Date == sl[0].Date) { 
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag)
+            {
+                modifiedEntities = db.Schedule.Where(gr => gr.GroupId == group).Where(d => d.Date == date).OrderBy(l => l.Lesson).ToList();
+                for (int i = 0; i < sl.Capacity; i++)
+                {
+                    modifiedEntities[i].Classroom = sl[i].Classroom;
+                    modifiedEntities[i].SubjectId = sl[i].SubjectId;
+                    db.Entry(modifiedEntities[i]).State = EntityState.Modified;
+                }
+             } else {
+                 foreach (var schedule in sl) {
+                     schedule.Date = date;
+                     db.Entry(schedule).State = EntityState.Added;
+                 }
+             }
+            db.SaveChanges();
             return RedirectToAction("ScheduleManager");
         }
 

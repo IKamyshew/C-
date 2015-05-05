@@ -10,8 +10,11 @@ namespace Academy08._04.Models
     public class TeachersGroups
     {
         [Key][Column(Order = 0)]
-        public int? TeacherId { get; set; }
+        public int TeacherId { get; set; }
+        public User Teacher { get; set; }
+
         [Key][Column(Order = 1)]
-        public int? GroupId { get; set; }
+        public int GroupId { get; set; }
+        public Group Group { get; set; }
     }
 }

@@ -68,8 +68,8 @@
                 </tr>
             }
         </table>
-
-        @using (Html.BeginForm("addSchedules", "Interface"))
+@if (HttpContext.Current.User.IsInRole("Manager")) { 
+        using (Html.BeginForm("addSchedules", "Interface"))
         {
             <table>
                 <tr>
@@ -77,7 +77,6 @@
                     <td>@Html.EditorFor(modelItem => Model[0].Date)</td>
                 </tr>
             </table> 
-            DateTime date = Model[0].Date;
             <table border="1" cellspacing="0" cellpadding="0">
                 <tr>
                     <th width="10" align="center">
@@ -92,8 +91,8 @@
                 </tr>
             @for (int i = 0; i < Model.Count(); i++)
             {
-                //@Html.HiddenFor(modelItem => Model[i].Date, date)
-                @Html.EditorFor(modelItem => Model[i].Date, Model[0].Date)
+                @Html.HiddenFor(modelItem => Model[i].Date, Model[0].Date);
+
                 @Html.HiddenFor(modelItem => Model[i].GroupId, Model[i].GroupId);
                 @Html.HiddenFor(modelItem => Model[i].Lesson, i+1);
                 <tr>
@@ -111,6 +110,7 @@
             </table>
         <input type="submit" value="Save new schedule" />
         }
+}
     </div>
 </body>
 </html>

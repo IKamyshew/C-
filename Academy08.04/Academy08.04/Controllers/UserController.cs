@@ -223,9 +223,14 @@ namespace Academy08._04.Controllers
         {
             IEnumerable<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name", 2);
+            int group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
 
-            List<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == 2).ToList();
+            List<TeachersGroups> teachers = db.TeachersGroups.Include(t => t.Teacher).Include(g => g.Group).Where(gr => gr.GroupId == group_filter).ToList();
+            ViewBag.Teachers = teachers;
 
+            List<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == group_filter).ToList();
+
+            Session["group"] = db.Groups.Find(group_filter);
             return View(students);
         }
 
@@ -240,9 +245,88 @@ namespace Academy08._04.Controllers
             IEnumerable<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
             ViewBag.Groups = new SelectList(groups, "Id", "Name");
 
+            List<TeachersGroups> teachers = db.TeachersGroups.Include(t => t.Teacher).Include(g => g.Group).Where(gr => gr.GroupId == group_filter).ToList();
+            ViewBag.Teachers = teachers;
+
             List<User> students = db.Users.Where(s => s.RoleId == 3).Where(s => s.GroupId == group_filter).ToList();
 
+            Session["group"] = db.Groups.Find(group_filter);
             return View(students);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult TeacherEditor()
+        {
+            int? group_filter = null;
+            Group currentGroup = null;
+
+            if (Session["group"] != null)
+            {
+                currentGroup = (Group)Session["group"];
+                group_filter = currentGroup.Id;
+            } else {
+                group_filter = 2;
+            }
+
+            List<User> allTeachers = db.Users.Where(r => r.RoleId == 2).ToList();
+            List<TeachersGroups> TeachersGroups = db.TeachersGroups.Where(gr => gr.GroupId == group_filter).ToList();
+            List<User> teachersInGroup = new List<User>();
+            List<User> teachersOutOfGroup = new List<User>();
+
+            bool flag;
+            foreach (var teacher in allTeachers)
+            {
+                flag = true;
+                foreach (var teacherInGroup in TeachersGroups)
+                {
+                    if (teacherInGroup.TeacherId == teacher.Id) { 
+                        teachersInGroup.Add(teacher);
+                        flag = false;
+                    }
+                }
+                if (flag)
+                {
+                    teachersOutOfGroup.Add(teacher);
+                }
+            }
+
+            ViewBag.Teachers = new SelectList(teachersOutOfGroup, "Id", "LastName");
+            ViewBag.GroupTeachers = new SelectList(teachersInGroup, "Id", "LastName");
+            ViewBag.GroupTeachersView = teachersInGroup;
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult TeacherEditor(int? add_filter, int? remove_filter)
+        {
+            Group currentGroup = null;
+
+            if (Session["group"] != null)
+            {
+                currentGroup = (Group)Session["group"];
+            }
+
+            if (add_filter != null)
+            {
+                if (ModelState.IsValid) { 
+                    TeachersGroups tg =  new TeachersGroups();
+                    tg.TeacherId = (int) add_filter;
+                    tg.GroupId = currentGroup.Id;
+                    db.Entry(tg).State = EntityState.Added;
+                    db.SaveChanges();
+                }
+            }
+            if (remove_filter != null)
+            {
+                TeachersGroups removeTeacher = db.TeachersGroups.Where(t => t.TeacherId == (int) remove_filter).Where(gr => gr.GroupId == currentGroup.Id).FirstOrDefault();
+                db.Entry(removeTeacher).State = EntityState.Deleted;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("TeacherEditor");
         }
 
         public ActionResult ChangeGroup(List<User> updatedStudents)

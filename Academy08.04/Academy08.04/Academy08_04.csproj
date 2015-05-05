@@ -225,6 +225,9 @@
   <ItemGroup>
     <Content Include="Views\Interface\ScheduleManager.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\TeacherEditor.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
