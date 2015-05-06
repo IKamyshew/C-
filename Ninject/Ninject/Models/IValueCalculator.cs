@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Ninject.Models
 {
-    interface IValueCalculator
+    public interface IValueCalculator
     {
-        decimal ValueProducts (IEnumerable<Product> products)
+        decimal ValueProducts(IEnumerable<Product> products);
     }
 }
