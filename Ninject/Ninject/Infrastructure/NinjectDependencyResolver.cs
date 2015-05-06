@@ -15,9 +15,9 @@ namespace Ninject.Infrastructure
     {
         private IKernel kernel;
 
-        public NinjectDependencyResolver()
+        public NinjectDependencyResolver(IKernel kernelParam)
         {
-            kernel = new StandardKernel();
+            kernel = kernelParam;
             AddBindings();
         }
 
