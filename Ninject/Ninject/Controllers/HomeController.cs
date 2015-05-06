@@ -18,12 +18,15 @@ namespace Ninject.Controllers
            new Product {Name = "Corner flag", Category = "Soccer", Price = 34.95M}
         };
 
+        private IValueCalculator calc;
+
+        public HomeController(IValueCalculator calcParam)
+        {
+            calc = calcParam;
+        }
+
         public ActionResult Index()
         {
-            IKernel ninjectKernel = new StandartKernel();
-            ninjectKernel.Bind<IValueCalculator>().To<LinqValueCalculator>();
-
-            LinqValueCalculator calc = new LinqValueCalculator();
             ShoppingCart cart = new ShoppingCart(calc) { Products = products };
             decimal totalValue = cart.CalculateProductTotal();
             return View(totalValue);
