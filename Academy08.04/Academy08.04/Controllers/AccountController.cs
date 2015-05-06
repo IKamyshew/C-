@@ -11,10 +11,12 @@ namespace Academy08._04.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
+
         public ActionResult Login()
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Login(LogViewModel model, string returnUrl)
         {
@@ -35,7 +37,7 @@ namespace Academy08._04.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный пароль или логин");
+                    ModelState.AddModelError("", "Incorrect login or password");
                 }
             }
             return View(model);

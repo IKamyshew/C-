@@ -182,7 +182,7 @@ namespace Academy08._04.Controllers
             bool flag = false;
             int group = sl[0].GroupId;
             DateTime date = sl[0].Date;
-            List<Schedule> modifiedEntities = new List<Schedule>(8);
+            List<Schedule> modifiedEntities = new List<Schedule>(Academy08._04.Models.Schedule.MaxLessonsPerDay);
 
             List<Schedule> schedules = db.Schedule.GroupBy(d => d.Date).Select(e => e.FirstOrDefault()).ToList();
 

@@ -86,12 +86,25 @@ namespace Academy08._04.Controllers
         public ActionResult Create(User user)
         {
             if (ModelState.IsValid) 
-            { 
-                db.Users.Add(user);
-                db.SaveChanges();
+            {
+                try { 
+                    User userEntity = db.Users.Where(l => l.Login == user.Login).FirstOrDefault();
+                    ModelState.AddModelError("", "This login already exist in database");
+                } catch {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-
-            return RedirectToAction("Index");
+            else
+            {
+                ModelState.AddModelError("", "Please fill all fields");
+            }
+            SelectList groups = new SelectList(db.Groups, "Id", "Name");
+            ViewBag.Groups = groups;
+            SelectList roles = new SelectList(db.Roles, "Id", "Name");
+            ViewBag.Roles = roles;
+            return View(user);
         }
 
         [HttpGet]
