@@ -29,7 +29,7 @@ namespace Academy08._04.Controllers
         [HttpGet]
         public ActionResult Schedule()
         {
-            //get cuttent user
+            //get current user
             string userName = HttpContext.User.Identity.Name;
             var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
             User user = users.FirstOrDefault(i => i.Login == userName);
