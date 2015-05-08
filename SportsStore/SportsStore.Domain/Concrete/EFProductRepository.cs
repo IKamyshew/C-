@@ -4,7 +4,7 @@ using SportsStore.Domain.Entities;
 
 namespace SportsStore.Domain.Concrete
 {
-    public class EFProductRepository : IProductRepozitory
+    public class EFProductRepository : IProductRepository
     {
         private EFDbContext context = new EFDbContext();
 

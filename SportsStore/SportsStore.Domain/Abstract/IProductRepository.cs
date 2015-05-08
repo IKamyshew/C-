@@ -7,7 +7,7 @@ using SportsStore.Domain.Entities;
 
 namespace SportsStore.Domain.Abstract
 {
-    public interface IProductRepozitory
+    public interface IProductRepository
     {
         IQueryable<Product> Products { get; }
     }

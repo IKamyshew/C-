@@ -31,7 +31,7 @@ namespace SportsStore.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            ninjectKernel.Bind<IProductRepozitory>().To<EFProductRepository>();
+            ninjectKernel.Bind<IProductRepository>().To<EFProductRepository>();
         }
     }
 }
