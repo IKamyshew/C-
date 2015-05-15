@@ -1,105 +1,77 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.IO;
+using System.Windows.Markup;
 
-namespace WPFTrainings
+namespace WpfApplication1
 {
+    /// <summary>
+    /// Логика взаимодействия для MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
-        string leftop = ""; // Левый операнд
-        string operation = ""; // Знак операции
-        string rightop = ""; // Правый операнд
- 
         public MainWindow()
         {
             InitializeComponent();
- 
-            // Добавляем обработчик для всех кнопок на гриде
-            foreach (UIElement c in LayoutRoot.Children)
-            {
-                if (c is Button)
-                {
-                    ((Button)c).Click += Button_Click;
-                }
-            }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void button1_Click(object sender, RoutedEventArgs e)
         {
-            // Получаем текст кнопки
-            string s = (string)((Button)e.OriginalSource).Content;
-            // Добавляем его в текстовое поле
-            textBlock.Text += s;
-            int num;
-            // Пытаемся преобразовать его в число
-            bool result =Int32.TryParse(s, out num);
-            // Если текст - это число
-            if (result == true)
+
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Помещаем базовую разметку
+            if (File.Exists(System.Environment.CurrentDirectory + "\\YourXaml.xaml"))
             {
-                // Если операция не задана
-                if (operation == "")
-                {
-                    // Добавляем к левому операнду
-                    leftop += s;
-                }
-                else
-                {
-                    // Иначе к правому операнду
-                    rightop += s;
-                }
+                txtCodeXAML.Text = File.ReadAllText("YourXaml.xaml");
             }
-            // Если было введено не число
             else
             {
-                // Если равно, то выводим результат операции
-                if (s == "=")
-                {
-                    Update_RightOp();
-                    textBlock.Text += rightop;
-                    operation = "";
-                }
-                // Очищаем поле и переменные
-                else if (s == "CLEAR")
-                {
-                    leftop = "";
-                    rightop = "";
-                    operation = "";
-                    textBlock.Text = "";
-                }
-                // Получаем операцию
-                else
-                {
-                    // Если правый операнд уже имеется, то присваиваем его значение левому
-                    // операнду, а правый операнд очищаем
-                    if (rightop != "")
-                    {
-                        Update_RightOp();
-                        leftop = rightop;
-                        rightop = "";
-                    }
-                    operation = s;
-                }
+                string s = "<Window xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\"\n" +
+                    "xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\n" +
+                    "Title=\"XAML Editor\" Height=\"350\" Width=\"525\" WindowStartupLocation=\"CenterScreen\">\n" +
+                    "<StackPanel>\n</StackPanel>\n</Window>";
+                txtCodeXAML.Text = s;
             }
         }
-        // Обновляем значение правого операнда
-        private void Update_RightOp()
+
+        private void Window_Closed(object sender, EventArgs e)
         {
-            int num1 = Int32.Parse(leftop);
-            int num2 = Int32.Parse(rightop);
-            // И выполняем операцию
-            switch (operation)
+            // Записать данные из текстового блока в локальный файл
+            File.WriteAllText("YourXaml.xaml", txtCodeXAML.Text);
+        }
+
+        private void btnViewXAML_Click(object sender, RoutedEventArgs e)
+        {
+            // Запись данных из текстового блока в файл YourXaml.xaml
+            File.WriteAllText("YourXaml.xaml", txtCodeXAML.Text);
+            Window myWindow = null;
+            try
             {
-                case "+":
-                    rightop = (num1 + num2).ToString();
-                    break;
-                case "-":
-                    rightop = (num1 - num2).ToString();
-                    break;
-                case "*":
-                    rightop = (num1 * num2).ToString();
-                    break;
-                case "/":
-                    rightop = (num1 / num2).ToString();
-                    break;
+                using (Stream sr = File.Open("YourXaml.xaml", FileMode.Open))
+                {
+                    myWindow = (Window)XamlReader.Load(sr);
+                    myWindow.ShowDialog();
+                    myWindow.Close();
+                    myWindow = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

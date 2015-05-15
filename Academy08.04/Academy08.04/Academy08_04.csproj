@@ -222,9 +222,6 @@
     <Content Include="Views\User\GroupManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Interface\ScheduleManager.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\User\TeacherEditor.cshtml" />
   </ItemGroup>
   <PropertyGroup>

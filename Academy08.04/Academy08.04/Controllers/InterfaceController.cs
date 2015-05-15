@@ -12,11 +12,9 @@ namespace Academy08._04.Controllers
 {
     public class InterfaceController : Controller
     {
-
         private AcademyContext db = new AcademyContext();
 
         [Authorize]
-        [HttpGet]
         public ActionResult PersonalPage()
         {
             string userName = HttpContext.User.Identity.Name;
@@ -25,156 +23,50 @@ namespace Academy08._04.Controllers
             return View(user);
         }
 
-        [Authorize(Roles = "Student")]
-        [HttpGet]
-        public ActionResult Schedule()
+        [Authorize]
+        public ActionResult Schedule(DateTime? date_filter = null, int group_filter = -1)
         {
-            //get current user
-            string userName = HttpContext.User.Identity.Name;
-            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
-            User user = users.FirstOrDefault(i => i.Login == userName);
+            if (!HttpContext.User.IsInRole("Student"))
+            {
+                //get groups
+                List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
+                ViewBag.Groups = new SelectList(groups, "Id", "Name");
+
+                //get subjects
+                List<Subject> subjects = db.Subjects.ToList();
+                ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
+
+                //getting current group
+                if (group_filter == -1)
+                    group_filter = groups[0].Id;
+            } else {
+                //get current group for student
+                string userName = HttpContext.User.Identity.Name;
+                var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
+                User CurrentUser = users.FirstOrDefault(i => i.Login == userName);
+                group_filter = (int) CurrentUser.GroupId;
+            }
 
             //date for this view
-            DateTime date_filter = db.Schedule.FirstOrDefault().Date;
-
-            //getting schedule
-            List<Schedule> scheduleByDate = db.Schedule.Include(s => s.Subject).Where(d => d.Date == date_filter).Where(gr => gr.GroupId == user.GroupId).ToList();
-            
-            //date filter
-            List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == user.GroupId)
-                                                     .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
-            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
-
-            return View(scheduleByDate);
-        }
-
-        [Authorize(Roles = "Student")]
-        [HttpPost]
-        public ActionResult Schedule(DateTime date_filter)
-        {
-            //get cuttent user
-            string userName = HttpContext.User.Identity.Name;
-            var users = db.Users.Include(u => u.Group).Include(u => u.Role).ToList();
-            User user = users.FirstOrDefault(i => i.Login == userName);
-
-            //date filter
-            List<Schedule> schedule = db.Schedule.Include(s => s.Subject)
-                                                  .Where(g => g.GroupId == user.GroupId)
-                                                  .GroupBy(d => d.Date)
-                                                  .Select(day => day.FirstOrDefault())
-                                                  .ToList();
-
-            ViewBag.Dates = new SelectList(schedule, "Date", "Date");
-
-            IEnumerable<Schedule> allSchedules = null;
-            if (date_filter == null)
-            {
-                RedirectToAction("Schedule");
-            }
-            else
-            {
-                allSchedules = from schedulesDB in db.Schedule.Include(u => u.Subject)
-                               where schedulesDB.Date == date_filter 
-                               where schedulesDB.GroupId == user.GroupId
-                               select schedulesDB;
-            }
-
-            return View(allSchedules.OrderBy(u => u.Lesson).ToList());
-        }
-
-        [Authorize(Roles = "Manager, Teacher")]
-        [HttpGet]
-        public ActionResult ScheduleManager()
-        {
-            //get groups
-            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
-            ViewBag.Groups = new SelectList(groups, "Id", "Name");
-
-            //get subjects
-            List<Subject> subjects = db.Subjects.ToList();
-            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
-
-            //get first group and date for view
-            int group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
-            DateTime date_filter = db.Schedule.ToList().FirstOrDefault().Date;
+            if (!date_filter.HasValue)
+                date_filter = (DateTime?)db.Schedule.Where(s => s.GroupId == group_filter).ToList().FirstOrDefault().Date;
 
             //get dates
             List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter)
                                                      .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
             ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
-            ViewBag.CurrentGroup = group_filter;
+
            
             // get model
             List<Schedule> ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
-            if (ScheduleList.Count < Academy08._04.Models.Schedule.MaxLessonsPerDay)
-            {
-                for (int i = 0; i < Academy08._04.Models.Schedule.MaxLessonsPerDay; i++ )
-                    try
-                    {
-                        bool check = ScheduleList[i].Lesson == i+1;
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        ScheduleList.Add(new Schedule());
-                        ScheduleList[i].Date = date_filter;
-                        ScheduleList[i].GroupId = group_filter;
-                        ScheduleList[i].Lesson = i + 1;
-                        ScheduleList[i].SubjectId = 13;
-                        db.Entry(ScheduleList[i]).State = EntityState.Added;
-                        db.SaveChanges();
-                    }
-                ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
-            }
+            if (ScheduleList == null)
+                date_filter = (DateTime?)db.Schedule.Where(s => s.GroupId == group_filter).ToList().FirstOrDefault().Date;
 
-            return View(ScheduleList);
-        }
-
-        [Authorize(Roles = "Manager, Teacher")]
-        [HttpPost]
-        public ActionResult ScheduleManager(DateTime? date_filter, int? group_filter)
-        {
-            if(group_filter == null)
-            {
-                group_filter = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").FirstOrDefault().Id;
-            }
-            if (date_filter == null)
-            {
-                date_filter = (DateTime?)db.Schedule.ToList().FirstOrDefault().Date;
-            }
-
-            List<Group> groups = db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
-            ViewBag.Groups = new SelectList(groups, "Id", "Name");
+            ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
+            
             ViewBag.CurrentGroup = group_filter;
 
-            List<Subject> subjects = db.Subjects.ToList();
-            ViewBag.Subjects = new SelectList(subjects, "Id", "Name");
-
-            List<Schedule> scheduleDate = db.Schedule.Include(s => s.Subject).Where(g => g.GroupId == group_filter)
-                                                     .GroupBy(d => d.Date).Select(day => day.FirstOrDefault()).ToList();
-            ViewBag.Dates = new SelectList(scheduleDate, "Date", "Date");
-
-            List<Schedule> ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
-            if (ScheduleList.Count < Academy08._04.Models.Schedule.MaxLessonsPerDay)
-            {
-                for (int i = 0; i < Academy08._04.Models.Schedule.MaxLessonsPerDay; i++)
-                    try
-                    {
-                        bool check = ScheduleList[i].Lesson == i + 1;
-                    }
-                    catch (ArgumentOutOfRangeException)
-                    {
-                        ScheduleList.Add(new Schedule());
-                        ScheduleList[i].Date = (DateTime) date_filter;
-                        ScheduleList[i].GroupId = (int) group_filter;
-                        ScheduleList[i].Lesson = i + 1;
-                        ScheduleList[i].SubjectId = 13;
-                        db.Entry(ScheduleList[i]).State = EntityState.Added;
-                        db.SaveChanges();
-                    }
-                ScheduleList = db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date_filter).Where(gr => gr.GroupId == group_filter).ToList();
-            }
-
-            return View(ScheduleList.OrderBy(u => u.Lesson).ToList());
+            return View(ScheduleList);
         }
 
         public ActionResult addSchedules(List<Schedule> sl)
@@ -185,7 +77,7 @@ namespace Academy08._04.Controllers
             List<Schedule> modifiedEntities = new List<Schedule>(Academy08._04.Models.Schedule.MaxLessonsPerDay);
 
             List<Schedule> schedules = db.Schedule.GroupBy(d => d.Date).Select(e => e.FirstOrDefault()).ToList();
-
+            
             foreach (var schedule in schedules)
             {
                 if (schedule.Date == sl[0].Date) { 
@@ -210,7 +102,7 @@ namespace Academy08._04.Controllers
                  }
              }
             db.SaveChanges();
-            return RedirectToAction("ScheduleManager");
+            return RedirectToAction("Schedule");
         }
 
         [Authorize(Roles = "Student")]
@@ -244,7 +136,7 @@ namespace Academy08._04.Controllers
             string userName = HttpContext.User.Identity.Name;
             User user = users.FirstOrDefault(i => i.Login == userName);
 
-            // geting subjects
+            // getting subjects
             var subjects = db.Subjects.ToList();
             ViewBag.Subjects = subjects;
 
