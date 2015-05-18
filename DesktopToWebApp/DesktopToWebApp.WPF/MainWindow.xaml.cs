@@ -12,17 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Data.Entity;
+using Academy.Model.Models;
+using Academy.Model.Model;
+using Academy.Model.Access;
 
 namespace DesktopToWebApp.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
+        private AcademyContext db = new AcademyContext();
+        
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Methods model = new Methods();
+            var users = model.GetAllUsers();
+
+            Users.ItemsSource = users;
         }
     }
 }

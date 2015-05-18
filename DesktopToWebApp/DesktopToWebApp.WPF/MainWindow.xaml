@@ -1,20 +1,22 @@
 ﻿<Window x:Class="DesktopToWebApp.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="375.88" Width="570.599">
+        xmlns:dg="http://schemas.microsoft.com/wpf/2008/toolkit"
+        Title="MainWindow" Loaded="Window_Loaded" 
+        Height="375.88" Width="570.599">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="3.5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Height="Auto" Grid.Column="0" Grid.Row="0">
-            <Button Name="Back" Background="DarkGray" Margin="3">Back</Button>
-            <Button Name="BtnToPerPage" Background="DarkGray" Margin="3">To Personal Page</Button>
             <Button Name="BtnAddUser" Background="DarkGray" Margin="3">Add User</Button>
             <Button Name="BtnAddGroup" Background="DarkGray" Margin="3">Add Group</Button>
             <Button Name="BtnManageGroups" Background="DarkGray" Margin="3">Manage Groups</Button>
+            <Button Name="BtnToPerPage" Background="DarkGray" Margin="3">To Personal Page</Button>
+            <Button Name="BtnLogOut" Background="DarkGray" Margin="3">Log out</Button>
         </StackPanel>
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Name="Table">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="10*"></RowDefinition>
@@ -23,24 +25,20 @@
                 <Button Name="BtnGroup" Background="DarkGray" Margin="3">Group</Button>
                 <Button Name="BtnRole" Background="DarkGray" Margin="3">Role</Button>
             </WrapPanel>
-            <DataGrid Grid.Row="1" AutoGenerateColumns="False">
-                <DataGrid.Columns >
-                    <DataGridTextColumn x:Name="THFirstName" Header="First Name"  Binding="{Binding FirstName}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THLastName" Header="Last Name"  Binding="{Binding LastName}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THRole" Header="Role"  Binding="{Binding Role}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THGroup" Header="Group"  Binding="{Binding Group}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THLogin" Header="Login"  Binding="{Binding Login}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THPassword" Header="Password"  Binding="{Binding Password}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THEdit" Header="Edit"  Binding="{Binding Edit}">
-                    </DataGridTextColumn>
-                    <DataGridTextColumn x:Name="THDelete" Header="Delete"  Binding="{Binding Delete}">
-                    </DataGridTextColumn>
+            <DataGrid Grid.Row="1" x:Name="Users" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="First Name"
+                             Binding="{Binding Path=FirstName}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Last Name" 
+                             Binding="{Binding Path=LastName}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Role" 
+                             Binding="{Binding Path=Role.Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Group" 
+                             Binding="{Binding Path=Group.Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Login" 
+                             Binding="{Binding Path=Login}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Password" 
+                             Binding="{Binding Path=Password}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
