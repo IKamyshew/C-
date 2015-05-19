@@ -51,6 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AcademyDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AcademyDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AcademyDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AcademyDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AcademyDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AcademyDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DBAccess\Entities.cs" />
     <Compile Include="Entities\AcademyContext.cs" />
     <Compile Include="Entities\Group.cs" />
     <Compile Include="Entities\Mark.cs" />
@@ -59,16 +75,45 @@
     <Compile Include="Entities\Subject.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>AcademyDB.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="AcademyDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AcademyDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="AcademyDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AcademyDB.edmx</DependentUpon>
+      <LastGenOutput>AcademyDB.Context.cs</LastGenOutput>
+    </None>
+    <None Include="AcademyDB.edmx.diagram">
+      <DependentUpon>AcademyDB.edmx</DependentUpon>
+    </None>
+    <None Include="AcademyDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AcademyDB.edmx</DependentUpon>
+      <LastGenOutput>AcademyDB.cs</LastGenOutput>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DBAccess\" />
+    <Folder Include="DataBase\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Academy.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Academy_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>Academy.mdf</DependentUpon>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
