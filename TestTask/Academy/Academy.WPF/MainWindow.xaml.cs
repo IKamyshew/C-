@@ -23,6 +23,7 @@ namespace Academy.WPF
         public MainWindow()
         {
             InitializeComponent();
+            WindowAuthentication.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
     }
 }
