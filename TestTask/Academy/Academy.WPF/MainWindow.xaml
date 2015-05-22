@@ -26,7 +26,7 @@
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Password:" FontSize="15" TextAlignment="Center"/>
-                <PasswordBox Grid.Column="1" HorizontalContentAlignment="Stretch"/>
+                <PasswordBox Name="PassBox" Grid.Column="1" HorizontalContentAlignment="Stretch"/>
             </Grid>
         </StackPanel>
         <StackPanel Grid.Row="2">
@@ -35,8 +35,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Log In"/>
-                <Button Grid.Column="1" Content="Exit"/>
+                <Button Grid.Column="0" Content="Log In" Click="BtnLogin"/>
+                <Button Grid.Column="1" Content="Exit" Click="BtnExit"/>
             </Grid>
         </StackPanel>
     </Grid>

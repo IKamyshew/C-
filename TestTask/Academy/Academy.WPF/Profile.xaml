@@ -1,0 +1,25 @@
+﻿<Window x:Class="Academy.WPF.Profile"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Profile" Height="400" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Height="Auto" Grid.Column="0">
+            <Button Name="BtnAdminPanel" Background="DarkGray" Margin="3">AdminPanel</Button>
+            <Button Name="BtnSchedule" Background="DarkGray" Margin="3">Schedule</Button>
+            <Button Name="BtnMarks" Background="DarkGray" Margin="3">Marks</Button>
+            <Button Name="BtnLogOut" Background="DarkGray" Margin="3">Log out</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <TextBlock Name="BlockFirstName"/>
+            <TextBlock Name="BlockLastName" />
+            <TextBlock Name="BlockRole" />
+            <TextBlock Name="BlockGroup" />
+            
+        </StackPanel>
+
+    </Grid>
+</Window>

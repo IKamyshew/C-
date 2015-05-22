@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/Site.css" type="text/css" rel="stylesheet" />
+</head>
+<body>
+    @if (TempData["message"] != null)
+    {
+        <div class="Message">@TempData["message"]</div>
+    }
+    <div id="header">
+        <div class="title">ACADEMY | @ViewBag.Title</div>
+    </div>
+    <div id="categories">
+        @if (HttpContext.Current.User.IsInRole("Manager") || HttpContext.Current.User.IsInRole("Teacher"))
+        {
+            if (ViewBag.Title == "PROFILE" || ViewBag.Title == "ADD USER" || ((string)ViewBag.Title).Remove(4) == "EDIT" )
+            { 
+                @Html.ActionLink("Admin Panel", "Users", "User");
+            }
+        }
+
+        @if (ViewBag.Title == "PROFILE")
+        {
+            @Html.ActionLink("Schedule", "Schedule", "Interface");
+            @Html.ActionLink("Marks", "Marks", "Interface");
+        }
+
+        @if (ViewBag.Title == "USERS")
+        {
+            if (HttpContext.Current.User.IsInRole("Manager"))
+            {
+                @Html.ActionLink("Add User", "Create", "User");
+            @Html.ActionLink("Add Group", "AddGroup", "User");
+            @Html.ActionLink("Add Subject", "AddSubject", "User");
+            }
+
+            if (HttpContext.Current.User.IsInRole("Teacher"))
+            {
+                @Html.ActionLink("Manage Groups", "GroupManager", "User");
+            }
+        }
+
+
+        @if ((ViewBag.Title != "PROFILE") && (ViewBag.Title != "AUTHENTICATION"))
+        {
+            @Html.ActionLink("Profile", "ProfilePage", "Interface")
+        }
+
+        @if (ViewBag.Title != "AUTHENTICATION")
+        {
+            @Html.ActionLink("Log Out", "LogOff", "Account")
+        }
+    </div>
+    <div id="content">
+        @RenderBody()
+    </div>
+</body>
+</html>

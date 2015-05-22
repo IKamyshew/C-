@@ -6,34 +6,41 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Academy.ASPNET.Models;
 using Academy.Model.Entities;
+using Academy.Model.DBAccess;
 
 namespace Academy.ASPNET.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
     {
+        private CurrentUser CurrentUser = new CurrentUser();
 
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                TempData["message"] = "You don't have access to this page. Please, contact your administrator.";
+                return RedirectToAction("ProfilePage", "Interface");
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult Login(LogViewModel model, string returnUrl)
         {
+
             if (ModelState.IsValid)
             {
-                if (ValidateUser(model.UserName, model.Password))
+                if (CurrentUser.ValidateUser(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-
                     if (Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
                     else
                     {
-                        return RedirectToAction("Profile", "Interface");
+                        return RedirectToAction("ProfilePage", "Interface");
                     }
                 }
                 else
@@ -46,34 +53,8 @@ namespace Academy.ASPNET.Controllers
 
         public ActionResult LogOff()
         {
-            FormsAuthentication.SignOut();
-
+            CurrentUser.LogOff();
             return RedirectToAction("Login", "Account");
-        }
-
-        private bool ValidateUser(string login, string password)
-        {
-            bool isValid = false;
-
-            using (AcademyContext _db = new AcademyContext())
-            {
-                try
-                {
-                    User user = (from u in _db.Users
-                                 where u.Login == login && u.Password == password
-                                 select u).FirstOrDefault();
-
-                    if (user != null)
-                    {
-                        isValid = true;
-                    }
-                }
-                catch
-                {
-                    isValid = false;
-                }
-            }
-            return isValid;
         }
     }
 }

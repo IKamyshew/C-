@@ -12,18 +12,36 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Academy.Model.DBAccess;
 
 namespace Academy.WPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        public string Login { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             WindowAuthentication.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        private void BtnLogin(object sender, RoutedEventArgs e)
+        {
+            Login = LoginBox.Text;
+            string Password = PassBox.Password;
+            CurrentUser user = new CurrentUser();
+            if (user.ValidateUser(Login, Password))
+            {
+                Profile profileWin = new Profile(Login);
+                profileWin.Show();
+                this.Close();
+            }
+        }
+
+        private void BtnExit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

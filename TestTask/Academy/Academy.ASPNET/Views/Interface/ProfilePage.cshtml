@@ -1,0 +1,41 @@
+﻿@model Academy.Model.Entities.User
+
+@{
+    ViewBag.Title = "PROFILE";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <table>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName):
+            </th>
+            <td>
+                @Html.DisplayFor(model => Model.FirstName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName):
+            </th>
+            <td>
+                @Html.DisplayFor(model => Model.LastName)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Role.Name):
+            </th>
+            <td>
+                @Html.DisplayFor(model => Model.Role.Name)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Group.Name):
+            </th>
+            <td>
+                @Html.DisplayFor(model => Model.Group.Name)
+            </td>
+        </tr>
+    </table>
