@@ -117,5 +117,113 @@ namespace Academy.ASPNET.Controllers
 
             return RedirectToAction("Users", "User");
         }
+
+        [Authorize(Roles = "Manager")]
+        public ActionResult GroupManager()
+        {
+            List<Group> groups = db.GetAllGroups();
+            ViewBag.Groups = groups;
+            return View();
+        }
+
+        [Authorize(Roles = "Manager")]
+        public ActionResult AddGroup(Group group)
+        {
+            if (db.AddGroup(group))
+                TempData["message"] = "Group " + group.Name + " successfully added";
+            else
+                TempData["message"] = "Failed to add group " + group.Name;
+
+            return RedirectToAction("GroupManager");
+        }
+
+        [Authorize(Roles = "Manager")]
+        public ActionResult DeleteGroup(int id)
+        {
+            if(db.DeleteGroup(id))
+                TempData["message"] = "Group successfully deleted";
+            else
+                TempData["message"] = "Failed to delete group";
+
+            return RedirectToAction("GroupManager");
+        }
+
+        [Authorize(Roles = "Teacher")]
+        public ActionResult GroupManager(int group_filter = -1)
+        {
+            List<Group> groups = db.GetAllStudentGroups();
+            ViewBag.Groups = new SelectList(groups, "Id", "Name", 2);
+            if(group_filter == -1)
+                group_filter = db.GetAllStudentGroups().FirstOrDefault().Id;
+
+            List<TeachersGroups> teachers = db.GetTeachersForGroup(group_filter);
+            ViewBag.Teachers = teachers;
+
+            List<User> students = db.GetAllStudentsForGroup(group_filter);
+
+            Session["group"] = db.GetGroupByID(group_filter);
+            return View(students);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Teacher")]
+        public ActionResult TeacherEditor()
+        {
+            int group_filter = -1;
+
+            if (Session["group"] != null)
+                group_filter = ((Group)Session["group"]).Id;
+            else
+                group_filter = db.GetAllStudentGroups().FirstOrDefault().Id;
+
+            List<User> allTeachers = db.GetAllTeachers();
+            List<User> teachersInGroup = new List<User>();
+            List<User> teachersOutOfGroup = new List<User>();
+
+            foreach (var teacher in allTeachers)
+            {
+                if (db.IsTeacherRelatesToGroup(group_filter,teacher.Id))
+                    teachersInGroup.Add(teacher);
+                else
+                    teachersOutOfGroup.Add(teacher);
+            }
+
+            ViewBag.Teachers = new SelectList(teachersOutOfGroup, "Id", "LastName");
+            ViewBag.GroupTeachers = new SelectList(teachersInGroup, "Id", "LastName");
+            ViewBag.GroupTeachersView = teachersInGroup;
+
+            return View();
+        }
+
+        [Authorize(Roles = "Teacher")]
+        public ActionResult EditTeachers(int? add_filter, int? remove_filter)
+        {
+            Group currentGroup = null;
+
+            if (Session["group"] != null)
+                currentGroup = (Group)Session["group"];
+            else { 
+                TempData["message"] = "Failed to determine group. Please choose group firstly.";
+                return RedirectToAction("GroupManager");
+            }
+
+
+            if (add_filter != null)
+                db.RemoveTeacherToGroup(currentGroup.Id, (int)add_filter);
+
+            if (remove_filter != null)
+                db.RemoveTeacherToGroup(currentGroup.Id, (int)remove_filter);
+
+            return RedirectToAction("TeacherEditor");
+        }
+
+        public ActionResult ChangeGroup(List<User> updatedStudents)
+        {
+            foreach (User student in updatedStudents)
+                if (ModelState.IsValid)
+                    db.UpdateUser(student);
+
+            return RedirectToAction("GroupManager");
+        }
     }
 }

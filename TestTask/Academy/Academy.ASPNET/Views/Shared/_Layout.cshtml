@@ -34,8 +34,8 @@
             if (HttpContext.Current.User.IsInRole("Manager"))
             {
                 @Html.ActionLink("Add User", "Create", "User");
-            @Html.ActionLink("Add Group", "AddGroup", "User");
-            @Html.ActionLink("Add Subject", "AddSubject", "User");
+                @Html.ActionLink("Manage Subjects", "AddSubjectManager", "User");
+                @Html.ActionLink("Manage Groups", "GroupManager", "User");
             }
 
             if (HttpContext.Current.User.IsInRole("Teacher"))

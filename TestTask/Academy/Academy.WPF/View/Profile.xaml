@@ -7,11 +7,11 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="3.5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Height="Auto" Grid.Column="0">
-            <Button Name="BtnAdminPanel" Background="DarkGray" Margin="3">AdminPanel</Button>
-            <Button Name="BtnSchedule" Background="DarkGray" Margin="3">Schedule</Button>
-            <Button Name="BtnMarks" Background="DarkGray" Margin="3">Marks</Button>
-            <Button Name="BtnLogOut" Background="DarkGray" Margin="3">Log out</Button>
+        <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
+            <Button Name="BtnAdminPanel" Background="LightGray" Margin="3">AdminPanel</Button>
+            <Button Name="BtnSchedule" Background="LightGray" Margin="3">Schedule</Button>
+            <Button Name="BtnMarks" Background="LightGray" Margin="3">Marks</Button>
+            <Button Name="BtnLogOut" Background="LightGray" Margin="3">Log out</Button>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <TextBlock Name="BlockFirstName"/>

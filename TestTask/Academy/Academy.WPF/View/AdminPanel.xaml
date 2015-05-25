@@ -1,0 +1,26 @@
+﻿<Window x:Class="Academy.WPF.View.AdminPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AdminPanel" Height="400" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
+            <Button Name="BtnAdminPanel" Background="LightGray" Margin="3">Add User</Button>
+            <Button Name="BtnSchedule" Background="LightGray" Margin="3">Add Group</Button>
+            <Button Name="BtnMarks" Background="LightGray" Margin="3">Add Subject</Button>
+            <Button Name="BtnManageGroups" Background="LightGray" Margin="3">Manage Groups</Button>
+            <Button Name="BtnProfile" Background="LightGray" Margin="3">Profile</Button>
+            <Button Name="BtnLogOut" Background="LightGray" Margin="3">Log out</Button>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <TextBlock Name="BlockFirstName"/>
+            <TextBlock Name="BlockLastName" />
+            <TextBlock Name="BlockRole" />
+            <TextBlock Name="BlockGroup" />
+
+        </StackPanel>
+    </Grid>
+</Window>

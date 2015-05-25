@@ -1,0 +1,38 @@
+﻿@model Group
+@using Academy.Model.Entities;
+@{
+    ViewBag.Title = "GROUP MANAGER";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddGroup", "User"))
+{
+
+    <fieldset>
+        <legend>New group</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+        </div>
+
+        <p><input type="submit" value="Add" /></p>
+    </fieldset>
+}
+<table>
+    @if (ViewBag.Groups != null)
+    {
+        int i = 0;
+        foreach (Group item in ViewBag.Groups as List<Group>)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@item.Name</td>
+                <td>@Html.ActionLink("Delete", "DeleteGroup", new { id = item.Id })</td>
+            </tr>
+        }
+    }
+</table>

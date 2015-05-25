@@ -23,12 +23,12 @@ namespace Academy.WPF
             CurrentUser CurUser = new CurrentUser();
             User user = CurUser.GetCurrentUserByLogin(Login);
 
-            BlockFirstName.Text = "First Name: " + user.FirstName;
-            BlockFirstName.Text = "Last Name: " + user.LastName;
-            BlockFirstName.Text = "Role: " + user.Role.Name;
-            BlockFirstName.Text = "Group: " + user.Group.Name;
-
             InitializeComponent();
+
+            BlockFirstName.Text = "First Name: " + user.FirstName;
+            BlockLastName.Text = "Last Name: " + user.LastName;
+            BlockRole.Text = "Role: " + user.Role.Name;
+            BlockGroup.Text = "Group: " + user.Group.Name;
 
         }
     }
