@@ -18,11 +18,14 @@ namespace Academy.WPF
 {
     public partial class MainWindow : Window
     {
-        public string Login { get; set; }
+        private string Login { get; set; }
+        private CurrentUser User;
 
         public MainWindow()
         {
             InitializeComponent();
+            User = new CurrentUser();
+            User.LogOff();
             WindowAuthentication.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
@@ -30,10 +33,9 @@ namespace Academy.WPF
         {
             Login = LoginBox.Text;
             string Password = PassBox.Password;
-            CurrentUser user = new CurrentUser();
-            if (user.ValidateUser(Login, Password))
+            if (User.ValidateUser(Login, Password))
             {
-                Profile profileWin = new Profile(Login);
+                Profile profileWin = new Profile(User.GetCurrentUserByLogin(Login));
                 profileWin.Show();
                 this.Close();
             }

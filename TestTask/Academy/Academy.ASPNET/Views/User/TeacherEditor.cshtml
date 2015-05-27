@@ -1,0 +1,60 @@
+﻿@using Academy.Model.Entities;
+@{
+    ViewBag.Title = "TEACHER EDITOR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table>
+    <tr>
+        <th>
+            Group name:
+        </th>
+        <td>
+            @{
+                String name = ((Group)Session["group"]).Name;
+            }
+            @name
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Teachers:
+        </th>
+        @if (ViewBag.GroupTeachers != null)
+        {
+            foreach (var teacher in ViewBag.GroupTeachersView)
+            {
+                String str = teacher.FirstName + " " + teacher.LastName + ";";
+                <td>@str</td>
+            }
+        }
+    </tr>
+    <tr>
+        @if (ViewBag.Teachers != null)
+        {
+            using (Html.BeginForm("EditTeachers", "User"))
+            {
+                <td>
+                    @Html.DropDownList("add_filter", ViewBag.Teachers as SelectList)
+                </td>
+                <td>
+                    <input type="submit" value="Add" />
+                </td>
+            }
+        }
+    </tr>
+    <tr>
+        @if (ViewBag.GroupTeachers != null)
+        {
+            using (Html.BeginForm("EditTeachers", "User"))
+            {
+                <td>
+                    @Html.DropDownList("remove_filter", ViewBag.GroupTeachers as SelectList)
+                </td>
+                <td>
+                    <input type="submit" value="Remove" />
+                </td>
+            }
+        }
+    </tr>
+</table>

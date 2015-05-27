@@ -17,7 +17,9 @@
     <div id="categories">
         @if (HttpContext.Current.User.IsInRole("Manager") || HttpContext.Current.User.IsInRole("Teacher"))
         {
-            if (ViewBag.Title == "PROFILE" || ViewBag.Title == "ADD USER" || ((string)ViewBag.Title).Remove(4) == "EDIT" )
+            if (ViewBag.Title == "PROFILE" || ViewBag.Title == "ADD USER" || ((string)ViewBag.Title).Remove(4) == "EDIT"
+                || ViewBag.Title == "GROUP MANAGER" || ViewBag.Title == "GROUP AND TEACHER MANAGER" || ViewBag.Title == "TEACHER EDITOR"
+                || ViewBag.Title == "SUBJECTS")
             { 
                 @Html.ActionLink("Admin Panel", "Users", "User");
             }
@@ -26,24 +28,40 @@
         @if (ViewBag.Title == "PROFILE")
         {
             @Html.ActionLink("Schedule", "Schedule", "Interface");
-            @Html.ActionLink("Marks", "Marks", "Interface");
+            if (HttpContext.Current.User.IsInRole("Teacher"))
+            {
+                @Html.ActionLink("Marks", "MarksTeacher", "Interface");
+            }
+            if (HttpContext.Current.User.IsInRole("Student"))
+            {
+                @Html.ActionLink("Marks", "Marks", "Interface");
+            }
         }
 
         @if (ViewBag.Title == "USERS")
         {
             if (HttpContext.Current.User.IsInRole("Manager"))
             {
-                @Html.ActionLink("Add User", "Create", "User");
-                @Html.ActionLink("Manage Subjects", "AddSubjectManager", "User");
+                @Html.ActionLink("Add User", "AddUser", "User");
+                @Html.ActionLink("Manage Subjects", "Subjects", "User");
                 @Html.ActionLink("Manage Groups", "GroupManager", "User");
             }
 
             if (HttpContext.Current.User.IsInRole("Teacher"))
             {
-                @Html.ActionLink("Manage Groups", "GroupManager", "User");
+                @Html.ActionLink("Manage Groups", "TeacherGroupManager", "User");
             }
         }
-
+        
+        @if (ViewBag.Title == "TEACHER EDITOR")
+        {
+            @Html.ActionLink("Manage Groups", "TeacherGroupManager", "User");
+        }
+        
+        @if (ViewBag.Title == "ADD MARK")
+        {
+            @Html.ActionLink("Marks", "MarksTeacher", "Interface");
+        }
 
         @if ((ViewBag.Title != "PROFILE") && (ViewBag.Title != "AUTHENTICATION"))
         {
@@ -54,6 +72,7 @@
         {
             @Html.ActionLink("Log Out", "LogOff", "Account")
         }
+        
     </div>
     <div id="content">
         @RenderBody()

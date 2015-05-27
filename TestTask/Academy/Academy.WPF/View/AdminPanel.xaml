@@ -8,12 +8,12 @@
             <ColumnDefinition Width="3.5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
-            <Button Name="BtnAdminPanel" Background="LightGray" Margin="3">Add User</Button>
-            <Button Name="BtnSchedule" Background="LightGray" Margin="3">Add Group</Button>
-            <Button Name="BtnMarks" Background="LightGray" Margin="3">Add Subject</Button>
+            <Button Name="BtnAddUser" Background="LightGray" Margin="3">Add User</Button>
             <Button Name="BtnManageGroups" Background="LightGray" Margin="3">Manage Groups</Button>
+            <Button Name="BtnManageSubject" Background="LightGray" Margin="3">Manage Subjects</Button>
+            <Button Name="BtnTeacherManageGroups" Background="LightGray" Margin="3">Manage Groups</Button>
             <Button Name="BtnProfile" Background="LightGray" Margin="3">Profile</Button>
-            <Button Name="BtnLogOut" Background="LightGray" Margin="3">Log out</Button>
+            <Button Name="BtnLogOut" Background="LightGray" Margin="3" Click="BtnLogOut_Click">Log out</Button>
         </StackPanel>
         <StackPanel Grid.Column="1">
             <TextBlock Name="BlockFirstName"/>

@@ -1,0 +1,41 @@
+﻿@model Subject
+@using Academy.Model.Entities
+@{
+    ViewBag.Title = "SUBJECTS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AddSubject", "User"))
+{
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>New subject</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <p><input type="submit" value="Add" /></p>
+    </fieldset>
+}
+<table>
+    @if (ViewBag.Subjects != null)
+    {
+        int i = 0;
+        foreach (Subject item in ViewBag.Subjects as List<Subject>)
+        {
+            i++;
+            <tr>
+                <td>@i</td>
+                <td>@item.Name</td>
+                <td>@Html.ActionLink("Delete", "DeleteSubject", new { id = item.Id })</td>
+            </tr>
+        }
+    }
+</table>
+

@@ -47,35 +47,41 @@ namespace Academy.ASPNET.Controllers
             return View(allUsers);
         }
 
+        [HttpGet]
         [Authorize(Roles = "Manager")]
-        public ActionResult Create(User user)
+        public ActionResult AddUser()
         {
             SelectList groups = new SelectList(db.GetAllGroups(), "Id", "Name");
             ViewBag.Groups = groups;
             SelectList roles = new SelectList(db.GetAllRoles(), "Id", "Name");
             ViewBag.Roles = roles;
 
-            if (user.RoleId != 0)
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Manager")]
+        public ActionResult AddUser(User user)
+        {
+            SelectList groups = new SelectList(db.GetAllGroups(), "Id", "Name");
+            ViewBag.Groups = groups;
+            SelectList roles = new SelectList(db.GetAllRoles(), "Id", "Name");
+            ViewBag.Roles = roles;
+            
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    if (db.AddUser(user)) {
+                if (db.AddUser(user)) {
                         TempData["message"] = ("User " + user.FirstName + " " + user.LastName + " was successfully added.");
                         return RedirectToAction("Users", "User");
-                    } else { 
-                        ModelState.AddModelError("", "This login already exist in database");
-                    }
+                } else {
+                     ModelState.AddModelError("", "This login already exist in database");
                 }
-                else
-                {
-                    ModelState.AddModelError("", "Please fill all fields");
-                }
-
-                return View(user);
+            } else {
+                 ModelState.AddModelError("", "Please fill all fields");
             }
-            else
-                return View(user);
+            return View(user);
         }
+
 
         [HttpGet]
         [Authorize(Roles = "Manager")]
@@ -118,6 +124,37 @@ namespace Academy.ASPNET.Controllers
             return RedirectToAction("Users", "User");
         }
 
+        [HttpGet]
+        public ActionResult Subjects()
+        {
+            List<Subject> subjects = db.GetAllSubjects();
+            ViewBag.Subjects = subjects;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddSubject(Subject subject)
+        {
+            if (ModelState.IsValid) { 
+                if(db.AddSubject(subject))
+                    TempData["message"] = "Subject " + subject.Name + " successfully added";
+                else
+                    TempData["message"] = "Subject failed to add";
+            }
+
+            return RedirectToAction("Subjects");
+        }
+
+        public ActionResult DeleteSubject(int id)
+        {
+            if(db.DeleteSubject(id))
+                TempData["message"] = "Subject successfully deleted";
+            else
+                TempData["message"] = "Subject failed to delete";
+
+            return RedirectToAction("Subjects");
+        }
+
         [Authorize(Roles = "Manager")]
         public ActionResult GroupManager()
         {
@@ -149,7 +186,7 @@ namespace Academy.ASPNET.Controllers
         }
 
         [Authorize(Roles = "Teacher")]
-        public ActionResult GroupManager(int group_filter = -1)
+        public ActionResult TeacherGroupManager(int group_filter = -1)
         {
             List<Group> groups = db.GetAllStudentGroups();
             ViewBag.Groups = new SelectList(groups, "Id", "Name", 2);
@@ -165,7 +202,7 @@ namespace Academy.ASPNET.Controllers
             return View(students);
         }
 
-        [HttpGet]
+
         [Authorize(Roles = "Teacher")]
         public ActionResult TeacherEditor()
         {
@@ -204,12 +241,12 @@ namespace Academy.ASPNET.Controllers
                 currentGroup = (Group)Session["group"];
             else { 
                 TempData["message"] = "Failed to determine group. Please choose group firstly.";
-                return RedirectToAction("GroupManager");
+                return RedirectToAction("TeacherGroupManager");
             }
 
 
             if (add_filter != null)
-                db.RemoveTeacherToGroup(currentGroup.Id, (int)add_filter);
+                db.AddTeacherToGroup(currentGroup.Id, (int)add_filter);
 
             if (remove_filter != null)
                 db.RemoveTeacherToGroup(currentGroup.Id, (int)remove_filter);
@@ -217,13 +254,14 @@ namespace Academy.ASPNET.Controllers
             return RedirectToAction("TeacherEditor");
         }
 
+        [Authorize(Roles = "Teacher")]
         public ActionResult ChangeGroup(List<User> updatedStudents)
         {
             foreach (User student in updatedStudents)
                 if (ModelState.IsValid)
                     db.UpdateUser(student);
 
-            return RedirectToAction("GroupManager");
+            return RedirectToAction("TeacherGroupManager");
         }
     }
 }

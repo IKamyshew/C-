@@ -195,6 +195,205 @@ namespace Academy.Model.DBAccess
             return null;
         }
 
+        //Subjects
+        public List<Subject> GetAllSubjects()
+        {
+            return db.Subjects.ToList();
+        }
+
+        public Subject GetSubjectByID(int subjectID)
+        {
+            Subject subj = db.Subjects.Find(subjectID);
+            if (subj != null)
+                return subj;
+
+            return null;
+        }
+
+        public bool IsSubjectExist(string subjectName)
+        {
+            if (!(db.Subjects.Where(s => s.Name == subjectName).FirstOrDefault() == null))
+                return true;
+            else
+                return false;
+        }
+
+        public bool AddSubject(Subject newSubject)
+        {
+            if (!IsSubjectExist(newSubject.Name))
+            { 
+                db.Subjects.Add(newSubject);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeleteSubject(int subjectID)
+        {
+            Subject subj = GetSubjectByID(subjectID);
+            if (subj != null)
+            {
+                db.Subjects.Remove(subj);
+                db.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        //Marks
+        public bool AddMark(Mark mark)
+        {
+            if (!IsMarkExist(mark))
+            { 
+                db.Marks.Add(mark);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsMarkExist(Mark mark)
+        {
+            if (db.Marks.Where(s => s.SubjectId == mark.SubjectId).Where(s => s.StudentId == mark.StudentId).Where(d => d.Date == mark.Date).FirstOrDefault() != null)
+                return true;
+            return false;
+        }
+
+        public List<Mark> GetMarksOrderedByDate() {
+            return db.Marks.OrderBy(d => d.Date)
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksOrderedByDateForStudent(int studentID)
+        {
+            return db.Marks.Where(u => u.StudentId == studentID)
+                           .OrderBy(d => d.Date)
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksWithDistinctDate() {
+            return db.Marks.GroupBy(d => d.Date)
+                           .Select(date => date.FirstOrDefault())
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksWithDistinctDateForStudent(int studentID)
+        {
+            return db.Marks.Where(s => s.StudentId == studentID)
+                           .GroupBy(d => d.Date)
+                           .Select(date => date.FirstOrDefault())
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksForSubject(int subjectID) {
+            return db.Marks.Where(s => s.SubjectId == subjectID).ToList();
+        }
+
+        public List<Mark> GetMarksWithDistinctDateForSubject(int subjectID)
+        {
+            return db.Marks.Where(s => s.SubjectId == subjectID)
+                           .GroupBy(d => d.Date)
+                           .Select(date => date.FirstOrDefault())
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksBetweenDates(DateTime startDate, DateTime endDate) {
+            return db.Marks.Where(d => d.Date >= startDate && d.Date <= endDate)
+                           .OrderBy(d => d.Date)
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksBetweenDatesForStudent(int studentID, DateTime startDate, DateTime endDate)
+        {
+            return db.Marks.Where(s => s.StudentId == studentID)
+                           .Where(d => d.Date >= startDate && d.Date <= endDate)
+                           .OrderBy(d => d.Date)
+                           .ToList();
+        }
+
+        public List<Mark> GetMarksWithDistinctDatesForStudentInPeriod(int studentID, DateTime startDate, DateTime endDate)
+        {
+            return db.Marks.Where(s => s.StudentId == studentID)
+                           .Where(d => d.Date >= startDate && d.Date <= endDate)
+                           .GroupBy(d => d.Date)
+                           .Select(date => date.FirstOrDefault())
+                           .ToList();
+        }
+
+
+        //Schedule
+        public bool AddSchedule(Schedule schedule)
+        {
+            if (!IsScheduleExist(schedule.GroupId, schedule.Date, schedule.Lesson)) { 
+                db.Schedule.Add(schedule);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool UpdateSchedule(Schedule schedule)
+        {
+            if (IsScheduleExist(schedule.GroupId, schedule.Date, schedule.Lesson))
+            {
+                db.Entry(schedule).State = EntityState.Modified;
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsScheduleExist(int groupID, DateTime date, int lesson)
+        {
+            bool exist = db.Schedule.Where(g => g.GroupId == groupID).Where(d => d.Date == date).Where(l => l.Lesson == lesson).FirstOrDefault() != null;
+            if (exist)
+                return true;
+            return false;
+        }
+
+        public List<Schedule> GetSchedulesForGroup(int groupID) {
+            return db.Schedule.Include(s => s.Subject).Where(s => s.GroupId == groupID).ToList();
+        }
+
+        public List<Schedule> GetSchedulesDistinctByDate()
+        {
+            return db.Schedule.Include(s => s.Subject)
+                                .GroupBy(d => d.Date)
+                                .Select(day => day.FirstOrDefault())
+                                .ToList();
+        }
+
+        public List<Schedule> GetSchedulesForGroupDistinctByDate(int groupID) {
+            return db.Schedule.Include(s => s.Subject)
+                                .Where(g => g.GroupId == groupID)
+                                .GroupBy(d => d.Date)
+                                .Select(day => day.FirstOrDefault())
+                                .ToList();
+        }
+
+        public List<Schedule> GetSchedulesForGroupAndDate(int groupID, DateTime date)
+        {
+            return db.Schedule.Include(u => u.Subject).Where(sch => sch.Date == date).Where(gr => gr.GroupId == groupID).OrderBy(l => l.Lesson).ToList();
+        }
+
+        public bool IsSchedulesContainsDateForGroup(DateTime date, int groupID)
+        {
+            if (db.Schedule.Where(d => d.Date == date).Where(g => g.GroupId == groupID).FirstOrDefault() != null)
+                return true;
+            else
+                return false;
+        }
+
+        public bool IsSchedulesContainsDate(DateTime date)
+        {
+            if (db.Schedule.Where(d => d.Date == date).FirstOrDefault() != null)
+                return true;
+            else
+                return false;
+        }
+
         //TeachersGroups
         public List<TeachersGroups> GetTeachersForGroup(int groupID)
         {

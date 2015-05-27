@@ -1,0 +1,47 @@
+﻿@model Mark
+@using Academy.Model.Entities
+
+@{
+    ViewBag.Title = "ADD MARK";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @{
+        Subject subject = ViewBag.Subject;
+        int subjId = subject.Id;
+    }
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <input type="hidden" value="@subjId" name="SubjectId" />
+    <fieldset>
+        <table>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.StudentId, ViewBag.Students as SelectList)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Date)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.EditorFor(model => model.Date)
+                    @Html.ValidationMessageFor(model => model.Date)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DropDownListFor(model => model.MarkValue, ViewBag.Marks as SelectList)
+                </td>
+            </tr>
+
+        </table>
+        <input type="submit" value="Add" />
+    </fieldset>
+}

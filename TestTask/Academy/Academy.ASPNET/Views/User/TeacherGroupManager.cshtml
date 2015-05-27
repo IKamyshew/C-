@@ -1,0 +1,75 @@
+﻿@model List<User>
+@using Academy.Model.Entities;
+@{
+    ViewBag.Title = "GROUP AND TEACHER MANAGER";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post" action="TeacherGroupManager">
+    <table>
+        <tr>
+            <td>
+                Group:
+            </td>
+            <td>
+                @Html.DropDownList("group_filter", ViewBag.Groups as SelectList)
+            </td>
+            <td>
+                <input type="submit" value="Filter" />
+            </td>
+        </tr>
+    </table>
+</form>
+<div>
+    <table>
+        <tr>
+            <th>Teachers: </th>
+            @if (ViewBag.Teachers != null)
+            {
+                foreach (TeachersGroups teacher in ViewBag.Teachers as List<TeachersGroups>)
+                {
+                    String str = teacher.Teacher.FirstName + " " + teacher.Teacher.LastName + ";";
+                    <td>@str</td>
+                }
+            }
+            else
+            {
+                <td>teachers are absent;</td>
+            }
+            <td>@Html.ActionLink("Edit", "TeacherEditor")</td>
+        </tr>
+    </table>
+</div>
+
+@using (Html.BeginForm("ChangeGroup", "User"))
+{
+    <table border="1">
+        <tr>
+            <th>
+                First Name
+            </th>
+            <th>
+                Last Name
+            </th>
+            <th>Group</th>
+        </tr>
+
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            @Html.HiddenFor(modelItem => Model[i].Id, Model[i].Id);
+            @Html.HiddenFor(modelItem => Model[i].FirstName, Model[i].FirstName);
+            @Html.HiddenFor(modelItem => Model[i].LastName, Model[i].LastName);
+            @Html.HiddenFor(modelItem => Model[i].Login);
+            @Html.HiddenFor(modelItem => Model[i].Password);
+            @Html.HiddenFor(modelItem => Model[i].RoleId, Model[i].RoleId);
+            <tr>
+                <td>@Html.DisplayFor(modelItem => Model[i].FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => Model[i].LastName)</td>
+                <td>@Html.DropDownListFor(modelItem => Model[i].GroupId, ViewBag.Groups as SelectList)</td>
+            </tr>
+        }
+        <tr>
+            <td><input type="submit" value="Change group" /></td>
+        </tr>
+    </table>
+}

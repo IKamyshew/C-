@@ -1,0 +1,126 @@
+﻿@model List<Schedule>
+@using Academy.Model.Entities
+@{
+    ViewBag.Title = "SCHEDULE";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @using (Html.BeginForm())
+    {
+        <table>
+            <tr>
+                <td>Date: </td>
+                <td>@Html.DropDownList("date_filter", ViewBag.Dates as SelectList)</td>
+                @if (!HttpContext.Current.User.IsInRole("Student"))
+                {
+                    <td>Group: </td>
+                    <td>@Html.DropDownList("group_filter", ViewBag.Groups as SelectList)</td>
+                }
+                <td><input type="submit" value="Search" /></td>
+            </tr>
+        </table>
+    }
+</div>
+
+<table border="1" cellspacing="0" cellpadding="0">
+    <tr>
+        <th width="10" align="center">
+            Lesson
+        </th>
+        <th width="173" align="center">
+            Classroom
+        </th>
+        <th width="200" align="center">
+            Subject
+        </th>
+    </tr>
+
+    @for (int i = 0; i < Model.Capacity; i++)
+    {
+        <tr>
+            <td align="center">
+                @try{ 
+                    @Html.DisplayFor(modelItem => Model[i].Lesson)
+                } catch {
+                    @(i + 1)
+                }
+            </td>
+            <td align="center">
+                @try
+                {
+                    @Html.DisplayFor(modelItem => Model[i].Classroom)
+                } catch { 
+                    <div>0</div>
+                }
+            </td>
+            <td align="center">
+                @try
+                {
+                    @Html.DisplayFor(modelItem => Model[i].Subject.Name)
+                } catch { 
+                    <div>No Lesson</div>
+                }
+            </td>
+        </tr>
+    }
+</table>
+@if (HttpContext.Current.User.IsInRole("Manager"))
+{
+    using (Html.BeginForm("addSchedules", "Interface"))
+    {
+        <table>
+            <tr>
+                <td>Create new/Edit Schedule for date:</td>
+                @try
+                {
+                    <td>@Html.EditorFor(modelItem => Model[0].Date)</td>
+                } catch {
+                    Model.Add(new Schedule());
+                    Model[0].Lesson = 1;
+                    Model[0].GroupId = ViewBag.CurrentGroup;
+                    <td>@Html.EditorFor(modelItem => Model[0].Date)</td>
+                }
+            </tr>
+        </table>
+        <table border="1" cellspacing="0" cellpadding="0">
+            <tr>
+                <th width="10" align="center">
+                    Lesson
+                </th>
+                <th width="173" align="center">
+                    Classroom
+                </th>
+                <th width="200" align="center">
+                    Subject
+                </th>
+            </tr>
+            @for (int i = 0; i < Model.Capacity; i++)
+            {
+                try {
+                    bool check = Model[i] != null;
+                } catch {
+                    Model.Add(new Schedule());
+                    Model[i].Lesson = i + 1;
+                    Model[i].GroupId = Model[0].GroupId;
+                }
+                @Html.HiddenFor(modelItem => Model[i].Date, Model[0].Date);
+
+                @Html.HiddenFor(modelItem => Model[i].GroupId, Model[i].GroupId);
+                @Html.HiddenFor(modelItem => Model[i].Lesson, i + 1);
+                <tr>
+                    <td width="10" align="center">
+                        @Html.DisplayFor(modelItem => Model[i].Lesson)
+                    </td>
+                    <td width="15" align="center">
+                        @Html.EditorFor(modelItem => Model[i].Classroom)
+                    </td>
+                    <td width="50" align="center">
+                        @Html.DropDownListFor(model => Model[i].SubjectId, ViewBag.Subjects as SelectList)
+                    </td>
+                </tr>
+            }
+        </table>
+        <input type="submit" value="Save new schedule" />
+    }
+}

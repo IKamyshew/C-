@@ -13,23 +13,42 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Academy.Model.DBAccess;
 using Academy.Model.Entities;
+using Academy.WPF.View;
 
 namespace Academy.WPF
 {
     public partial class Profile : Window
     {
-        public Profile(string Login)
+        private User User;
+
+        public Profile(User CurrentUser)
         {
-            CurrentUser CurUser = new CurrentUser();
-            User user = CurUser.GetCurrentUserByLogin(Login);
+            User = CurrentUser;
 
             InitializeComponent();
 
-            BlockFirstName.Text = "First Name: " + user.FirstName;
-            BlockLastName.Text = "Last Name: " + user.LastName;
-            BlockRole.Text = "Role: " + user.Role.Name;
-            BlockGroup.Text = "Group: " + user.Group.Name;
+            if (User.RoleId == 3)
+                BtnAdminPanel.Visibility = Visibility.Collapsed;
 
+            BlockFirstName.Text = "First Name: " + User.FirstName;
+            BlockLastName.Text = "Last Name: " + User.LastName;
+            BlockRole.Text = "Role: " + User.Role.Name;
+            BlockGroup.Text = "Group: " + User.Group.Name;
+
+        }
+
+        private void BtnAdminPanel_Click(object sender, RoutedEventArgs e)
+        {
+            AdminPanel adminPanelWin = new AdminPanel(User);
+            adminPanelWin.Show();
+            this.Close();
+        }
+
+        private void BtnLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow logInWin = new MainWindow();
+            logInWin.Show();
+            this.Close();
         }
     }
 }

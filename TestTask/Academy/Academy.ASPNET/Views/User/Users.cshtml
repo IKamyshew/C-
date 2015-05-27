@@ -33,7 +33,8 @@
             <th>
                 @Html.DisplayNameFor(model => model.Group.Name)
             </th>
-            @{
+            @if(HttpContext.Current.User.IsInRole("Manager"))
+            {
                 <th>
                     @Html.DisplayNameFor(model => model.Login)
                 </th>
@@ -59,7 +60,8 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Group.Name)
                 </td>
-                @{
+                @if (HttpContext.Current.User.IsInRole("Manager"))
+                {
                     <td>
                         @Html.DisplayFor(modelItem => item.Login)
                     </td>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Academy.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,25 @@ namespace Academy.WPF.View
     /// </summary>
     public partial class AdminPanel : Window
     {
-        public AdminPanel()
+        private User User;
+
+        public AdminPanel(User CurrentUser)
         {
+            User = CurrentUser;
+
             InitializeComponent();
+
+            if (User.RoleId == 1)
+            {
+
+            }
+        }
+
+        private void BtnLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow logInWin = new MainWindow();
+            logInWin.Show();
+            this.Close();
         }
     }
 }

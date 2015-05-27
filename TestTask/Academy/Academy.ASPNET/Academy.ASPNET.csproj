@@ -165,13 +165,34 @@
     <Content Include="Views\User\Users.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\AddUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\User\GroupManager.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\TeacherGroupManager.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\TeacherEditor.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\User\Subjects.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Interface\Schedule.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Interface\Marks.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Interface\MarksTeacher.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Interface\AddMark.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

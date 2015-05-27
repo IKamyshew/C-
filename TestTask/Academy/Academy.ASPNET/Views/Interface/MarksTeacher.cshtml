@@ -1,0 +1,145 @@
+﻿@model List<Mark>
+@using Academy.Model.Entities
+
+@{
+    ViewBag.Title = "MARKS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <form method="post" action="/Interface/MarksTeacher">
+        <table>
+            <tr>
+                <td><p>Group: </p></td>
+                <td> @Html.DropDownList("group_filter", ViewBag.Groups as SelectList)</td>
+                <td><p>Subject: </p></td>
+                <td> @Html.DropDownList("subject_filter", ViewBag.Subjects as SelectList)</td>
+                <td><input type="submit" value="Search" /> </td>
+                @{
+                    Group Group = ViewBag.Group as Group;
+                    Subject Subject = ViewBag.Subject as Subject;
+                    TempData["CurrentGroup"] = Group.Id;
+                    TempData["CurrentSubject"] = Subject.Id;
+                }
+                <td>@Html.ActionLink("Add marks to subject", "AddMark")</td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<form method="post" action="MarksTeacher">
+    <table>
+        <tr>
+            <td>From: </td>
+            <td>@Html.DropDownList("date_from", ViewBag.DataFilter as SelectList)</td>
+            <td>to: </td>
+            <td>@Html.DropDownList("date_to", ViewBag.DataFilter as SelectList)</td>
+            <td><input type="submit" value="Filter" /> </td>
+        </tr>
+    </table>
+</form>
+
+<table border="1">
+    @{
+    double finalAverage = 0;
+    int averCounter = 0;
+    <tr>
+        <th>
+            Student
+        </th>
+        @if (ViewBag.DataHeader != null)
+        {
+
+            foreach (var date in ViewBag.DataHeader as List<Mark>)
+            {
+                <th>
+                    @Html.DisplayFor(dateItem => date.Date)
+                </th>
+            }
+            <th>
+                Average
+            </th>
+        }
+    </tr>
+
+    if (ViewBag.Subjects != null)
+    {
+        List<Mark> dates = ViewBag.DataHeader;
+        foreach (User stud in ViewBag.Students as List<User>)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(studItem => stud.FirstName) @Html.DisplayFor(studItem => stud.LastName)
+                </th>
+                @{
+                    List<Mark> marks = Model.Where(m => m.StudentId == stud.Id).OrderBy(d => d.Date).ToList();
+                    if (marks == null) { 
+                        marks = new List<Mark>();
+                    }
+                    Mark mark = null;
+                    bool flag = false;
+                    double average = 0.0;
+                }
+                @for (int dateIndex = 0; dateIndex < dates.Count; dateIndex++)
+                {
+                    foreach (var checkMark in marks)
+                    {
+                        if (checkMark.Date == dates[dateIndex].Date)
+                        {
+                            flag = true;
+                            mark = checkMark;
+                            average += checkMark.MarkValue;
+                        }
+                    }
+                    if (flag)
+                    {
+                        flag = false;
+                        <td>
+                            @Html.DisplayFor(markItem => mark.MarkValue)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            -
+                        </td>
+                    }
+
+                }
+                @try
+                {
+                    if (marks.Count() > 0) { 
+                        average = Math.Round(average / marks.Count(), 1);
+                        finalAverage += average;
+                        averCounter++;
+                    }
+                } catch { }
+                <td>
+                    @average
+                </td>
+
+
+            </tr>
+        }
+    }
+    <tr>
+        @{finalAverage = Math.Round(finalAverage / averCounter, 1);}
+        <th>
+            Σ
+        </th>
+        @if (ViewBag.DataHeader != null)
+        {
+
+            foreach (var date in ViewBag.DataHeader as List<Mark>)
+            {
+                <th>
+                    -
+                </th>
+            }
+            <th>
+                @finalAverage
+            </th>
+        }
+    </tr>
+    }
+</table>
