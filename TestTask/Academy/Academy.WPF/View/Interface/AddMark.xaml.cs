@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Academy.WPF.View
+namespace Academy.WPF.View.Interface
 {
     /// <summary>
-    /// Interaction logic for Manage_Subjects.xaml
+    /// Interaction logic for AddMark.xaml
     /// </summary>
-    public partial class Manage_Subjects : Window
+    public partial class AddMark : Window
     {
-        public Manage_Subjects()
+        public AddMark()
         {
             InitializeComponent();
         }

@@ -1,7 +1,7 @@
-﻿<Window x:Class="Academy.WPF.View.Manage_Subjects"
+﻿<Window x:Class="Academy.WPF.View.Interface.MarksTeacher"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Manage_Subjects" Height="300" Width="300">
+        Title="MarksTeacher" Height="300" Width="300">
     <Grid>
         
     </Grid>

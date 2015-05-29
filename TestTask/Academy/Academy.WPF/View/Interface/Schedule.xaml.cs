@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Academy.WPF.View
+namespace Academy.WPF.View.Interface
 {
     /// <summary>
-    /// Interaction logic for ManageGroups.xaml
+    /// Interaction logic for Schedule.xaml
     /// </summary>
-    public partial class ManageGroups : Window
+    public partial class Schedule : Window
     {
-        public ManageGroups()
+        public Schedule()
         {
             InitializeComponent();
         }

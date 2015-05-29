@@ -1,7 +1,7 @@
-﻿<Window x:Class="Academy.WPF.View.AddUser"
+﻿<Window x:Class="Academy.WPF.View.AdminControls.TeacherEditor"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="AddUser" Height="300" Width="300">
+        Title="TeacherEditor" Height="300" Width="300">
     <Grid>
         
     </Grid>

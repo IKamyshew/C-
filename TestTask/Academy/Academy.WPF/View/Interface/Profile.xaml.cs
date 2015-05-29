@@ -27,6 +27,7 @@ namespace Academy.WPF
 
             InitializeComponent();
 
+            WindowProfile.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             if (User.RoleId == 3)
                 BtnAdminPanel.Visibility = Visibility.Collapsed;
 

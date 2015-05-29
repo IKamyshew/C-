@@ -13,6 +13,11 @@ namespace Academy.Model.DBAccess
         AcademyContext db = new AcademyContext();
 
         //Users
+        public User GetUserByLastName(string lastName)
+        {
+            return db.Users.Where(ln => ln.LastName == lastName).Include(r => r.Role).Include(g => g.Group).FirstOrDefault();
+        }
+
         public List<User> GetAllUsers()
         {
             return db.Users.Include(r => r.Role).Include(g => g.Group).ToList();
@@ -58,17 +63,28 @@ namespace Academy.Model.DBAccess
             return db.Users.Find(id);
         }
 
+        public User GetUserByLogin(string userLogin)
+        {
+            return db.Users.Where(ln => ln.Login == userLogin).Include(r => r.Role).Include(g => g.Group).FirstOrDefault();
+        }
+        
+
         public bool IsUserExists(int id)
         {
             using (AcademyContext db = new AcademyContext())
             {
                 try
                 {
-                    db.Users.Where(u => u.Id == id).FirstOrDefault();
-                    return true;
+                    User user = db.Users.Where(u => u.Id == id).FirstOrDefault();
+
+                    if (user != null)
+                    {
+                        return true;
+                    }
                 } catch {
                     return false;
                 }
+                return false;
             }
         }
 
@@ -110,8 +126,23 @@ namespace Academy.Model.DBAccess
         {
             if (IsUserExists(user.Id))
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+                try
+                {
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+                    db.Entry(user).State = EntityState.Detached;
+                    db.SaveChanges();
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
+                {
+                    return false;
+                }
+                catch (System.Data.Entity.Infrastructure.DbUpdateException)
+                {
+                    db.Entry(user).State = EntityState.Detached;
+                    db.SaveChanges();
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -133,10 +164,20 @@ namespace Academy.Model.DBAccess
             return db.Roles.ToList();
         }
 
+        public Role GetRole(string roleName)
+        {
+            return db.Roles.Where(r => r.Name == roleName).FirstOrDefault();
+        }
+
         //Groups
         public List<Group> GetAllGroups()
         {
             return db.Groups.ToList();
+        }
+
+        public Group GetGroupByName(string groupName)
+        {
+            return db.Groups.Where(g => g.Name == groupName).FirstOrDefault();
         }
 
         public List<Group> GetAllStudentGroups()

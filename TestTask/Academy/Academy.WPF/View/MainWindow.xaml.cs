@@ -24,8 +24,8 @@ namespace Academy.WPF
         public MainWindow()
         {
             InitializeComponent();
+
             User = new CurrentUser();
-            User.LogOff();
             WindowAuthentication.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 

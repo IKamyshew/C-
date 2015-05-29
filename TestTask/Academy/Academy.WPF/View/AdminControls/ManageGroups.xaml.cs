@@ -14,12 +14,9 @@ using System.Windows.Shapes;
 
 namespace Academy.WPF.View
 {
-    /// <summary>
-    /// Interaction logic for AddUser.xaml
-    /// </summary>
-    public partial class AddUser : Window
+    public partial class ManageGroups : Window
     {
-        public AddUser()
+        public ManageGroups()
         {
             InitializeComponent();
         }

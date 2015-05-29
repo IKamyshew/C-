@@ -61,11 +61,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\AddUser.xaml">
+    <Page Include="View\AdminControls\AddUser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\AdminPanel.xaml">
+    <Page Include="View\AdminControls\AdminPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AdminControls\Edit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AdminControls\TeacherEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AdminControls\TeacherManageGroups.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Interface\AddMark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Interface\Marks.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Interface\MarksTeacher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Interface\Schedule.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -77,37 +105,58 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\AddUser.xaml.cs">
+    <Compile Include="View\AdminControls\AddUser.xaml.cs">
       <DependentUpon>AddUser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\AdminPanel.xaml.cs">
+    <Compile Include="View\AdminControls\AdminPanel.xaml.cs">
       <DependentUpon>AdminPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AdminControls\Edit.xaml.cs">
+      <DependentUpon>Edit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AdminControls\TeacherEditor.xaml.cs">
+      <DependentUpon>TeacherEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AdminControls\TeacherManageGroups.xaml.cs">
+      <DependentUpon>TeacherManageGroups.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Interface\AddMark.xaml.cs">
+      <DependentUpon>AddMark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Interface\Marks.xaml.cs">
+      <DependentUpon>Marks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Interface\MarksTeacher.xaml.cs">
+      <DependentUpon>MarksTeacher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Interface\Schedule.xaml.cs">
+      <DependentUpon>Schedule.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\Manage Subjects.xaml">
+    <Page Include="View\AdminControls\ManageSubjects.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ManageGroups.xaml">
+    <Page Include="View\AdminControls\ManageGroups.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Profile.xaml">
+    <Page Include="View\Interface\Profile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="View\Manage Subjects.xaml.cs">
-      <DependentUpon>Manage Subjects.xaml</DependentUpon>
+    <Compile Include="View\AdminControls\ManageSubjects.xaml.cs">
+      <DependentUpon>ManageSubjects.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ManageGroups.xaml.cs">
+    <Compile Include="View\AdminControls\ManageGroups.xaml.cs">
       <DependentUpon>ManageGroups.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Profile.xaml.cs">
+    <Compile Include="View\Interface\Profile.xaml.cs">
       <DependentUpon>Profile.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

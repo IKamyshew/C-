@@ -1,0 +1,42 @@
+﻿<Window x:Class="Academy.WPF.View.AddUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Add User" Height="400" Width="875" Name="WindowAddUser">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
+            <Button Name="BtnAdminPanel" Background="LightGray" Margin="3" Click="BtnAdminPanel_Click">AdminPanel</Button>
+            <Button Name="BtnProfile" Background="LightGray" Margin="3" Click="BtnProfile_Click">Profile</Button>
+            <Button Name="BtnLogOut" Background="LightGray" Margin="3" Click="BtnLogOut_Click">Log out</Button>
+        </StackPanel>
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel  Grid.Column="0" HorizontalAlignment="Right" Margin="10,5,10,5">
+                <TextBlock Name="BlockFirstName" Text="First Name:" Margin="5,5,0,5" HorizontalAlignment="Right"/>
+                <TextBlock Name="BlockLastName" Text="Last Name:"  Margin="5,5,0,5" HorizontalAlignment="Right"/>
+                <TextBlock Name="BlockLogin"  Text="Login:" Margin="5,10,0,0" HorizontalAlignment="Right"/>
+                <TextBlock Name="BlockPassword" Text="Password:" Margin="5,10,0,0" HorizontalAlignment="Right"/>
+                <TextBlock Name="BlockRole"  Text="Role:" Margin="5,15,0,0" HorizontalAlignment="Right"/>
+                <TextBlock Name="BlockGroup" Text="Group:" Margin="5,15,0,0" HorizontalAlignment="Right"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="10,5,10,5">
+                <TextBox Name="BoxFirstNameValue" Margin="5"/>
+                <TextBox Name="BoxLastNameValue" Margin="5"/>
+                <TextBox Name="BoxLoginValue" Margin="5"/>
+                <TextBox Name="BoxPasswordValue" Margin="5"/>
+                <ComboBox Name="CBoxRoleValue" Margin="5"/>
+                <ComboBox Name="CBoxGroupValue" Margin="5"/>
+                <Button Name="BtnAdd" Content="Add User" Margin="15,15,15,15" Width="70" Click="BtnAdd_Click"/>
+                <Label Name="ErrorMsg" TextElement.Foreground="Red" />
+            </StackPanel>
+        </Grid>
+
+    </Grid>
+</Window>
