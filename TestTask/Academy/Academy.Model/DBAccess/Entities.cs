@@ -180,6 +180,15 @@ namespace Academy.Model.DBAccess
             return db.Groups.Where(g => g.Name == groupName).FirstOrDefault();
         }
 
+        public Group GetGroupByID(int id)
+        {
+            Group gr = db.Groups.Find(id);
+            if (gr != null)
+                return gr;
+
+            return null;
+        }
+
         public List<Group> GetAllStudentGroups()
         {
             return db.Groups.Where(gr => gr.Name != "Managers" && gr.Name != "Teachers").ToList();
@@ -227,14 +236,6 @@ namespace Academy.Model.DBAccess
             return false;
         }
 
-        public Group GetGroupByID(int id)
-        {
-            Group gr = db.Groups.Find(id);
-            if (gr != null)
-                return gr;
-
-            return null;
-        }
 
         //Subjects
         public List<Subject> GetAllSubjects()
@@ -244,11 +245,12 @@ namespace Academy.Model.DBAccess
 
         public Subject GetSubjectByID(int subjectID)
         {
-            Subject subj = db.Subjects.Find(subjectID);
-            if (subj != null)
-                return subj;
+            return db.Subjects.Find(subjectID);
+        }
 
-            return null;
+        public Subject GetSubjectByName(string subjectName)
+        {
+            return db.Subjects.Where(s => s.Name == subjectName).FirstOrDefault();
         }
 
         public bool IsSubjectExist(string subjectName)
@@ -388,10 +390,10 @@ namespace Academy.Model.DBAccess
 
         public bool IsScheduleExist(int groupID, DateTime date, int lesson)
         {
-            bool exist = db.Schedule.Where(g => g.GroupId == groupID).Where(d => d.Date == date).Where(l => l.Lesson == lesson).FirstOrDefault() != null;
-            if (exist)
-                return true;
-            return false;
+            return db.Schedule.Where(g => g.GroupId == groupID)
+                              .Where(d => d.Date == date)
+                              .Where(l => l.Lesson == lesson)
+                              .FirstOrDefault() != null;
         }
 
         public List<Schedule> GetSchedulesForGroup(int groupID) {

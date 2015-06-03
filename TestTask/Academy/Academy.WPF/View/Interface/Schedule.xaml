@@ -1,8 +1,57 @@
 ﻿<Window x:Class="Academy.WPF.View.Interface.Schedule"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Schedule" Height="300" Width="300">
+        Title="Schedule" Height="400" Width="900" FontFamily="Comic Sans MS" Name="WindowSchedule">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
+            <Button Name="BtnProfile" Background="LightGray" Margin="3" Click="BtnProfile_Click">Profile</Button>
+            <Button Name="BtnLogOut" Background="LightGray" Margin="3" Click="BtnLogOut_Click">Log out</Button>
+        </StackPanel>
+        <Grid Grid.Column="1" Name="Table">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <WrapPanel Grid.Row="0" Grid.Column="0" Height="Auto">
+                <Label>Group:</Label>
+                <ComboBox Name="CBoxChooseGroup" SelectionChanged="Group_Choosed" SelectedValue="1" Width="75"></ComboBox>
+                <Label>Date:</Label>
+                <ComboBox Name="CBoxChooseDate" SelectedValue="1" Width="75"></ComboBox>
+                <Button Name="BtnFilter" Width="75" Margin="3" Click="BtnFilter_Click">Filter</Button>
+            </WrapPanel>
+            <WrapPanel Grid.Row="0" Grid.Column="1" Height="Auto">
+                <Label Name="LabelAddEdit">Create or edit Schedule: Date</Label>
+                <TextBox Name="BoxChooseNewDate" Width="75"></TextBox>
+                <Button Name="BtnAdd" Width="75" Margin="3" Click="BtnAddSchedule_Click">Add/Edit</Button>
+            </WrapPanel>
+            <DataGrid Grid.Row="1" x:Name="TableSchedule" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="50" Header="Lesson"
+                             Binding="{Binding Path=Lesson}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="70" Header="Classroom" 
+                             Binding="{Binding Path=Classroom}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="220" Header="Subject" 
+                             Binding="{Binding Path=Subject.Name}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="TableNewSchedule" AutoGenerateColumns="False" BeginningEdit="Edit_Cell">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="50" Header="Lesson"
+                             Binding="{Binding Path=Lesson}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="70" Header="Classroom" 
+                             Binding="{Binding Path=Classroom}"></DataGridTextColumn>
+                    <DataGridTextColumn Width="220" Header="Subject" 
+                             Binding="{Binding Path=Subject.Name}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

@@ -126,14 +126,14 @@ namespace Academy.WPF.View
 
         private void BtnManageSubject_Click(object sender, RoutedEventArgs e)
         {
-            ManageSubjects MSWindow = new ManageSubjects();
+            ManageSubjects MSWindow = new ManageSubjects(User);
             MSWindow.Show();
             this.Close();
         }
 
         private void BtnTeacherManageGroups_Click(object sender, RoutedEventArgs e)
         {
-            TeacherManageGroups TMGWindow = new TeacherManageGroups();
+            TeacherManageGroups TMGWindow = new TeacherManageGroups(User);
             TMGWindow.Show();
             this.Close();
         }
@@ -177,6 +177,13 @@ namespace Academy.WPF.View
                 usersLastNames.Add(user.LastName);
             CBoxEditUser.ItemsSource = usersLastNames;
             CBoxDeleteUser.ItemsSource = usersLastNames;
+        }
+
+        private void BtnManageGroups_Click(object sender, RoutedEventArgs e)
+        {
+            ManageGroups MngWindow = new ManageGroups(User);
+            MngWindow.Show();
+            this.Close();
         }
     }
 }

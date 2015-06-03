@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Academy.Model.DBAccess;
 using Academy.Model.Entities;
 using Academy.WPF.View;
+using Academy.WPF.View.Interface;
 
 namespace Academy.WPF
 {
@@ -38,10 +39,18 @@ namespace Academy.WPF
 
         }
 
+        //side buttons
         private void BtnAdminPanel_Click(object sender, RoutedEventArgs e)
         {
             AdminPanel adminPanelWin = new AdminPanel(User);
             adminPanelWin.Show();
+            this.Close();
+        }
+
+        private void BtnSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            Academy.WPF.View.Interface.Schedule scheduleWin = new Academy.WPF.View.Interface.Schedule(User);
+            scheduleWin.Show();
             this.Close();
         }
 
@@ -51,5 +60,6 @@ namespace Academy.WPF
             logInWin.Show();
             this.Close();
         }
+
     }
 }
