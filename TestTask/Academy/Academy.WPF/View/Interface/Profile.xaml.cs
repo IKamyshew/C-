@@ -61,5 +61,12 @@ namespace Academy.WPF
             this.Close();
         }
 
+        private void BtnMarks_Click(object sender, RoutedEventArgs e)
+        {
+            Marks MarkWin = new Marks(User);
+            MarkWin.Show();
+            this.Close();
+        }
+
     }
 }

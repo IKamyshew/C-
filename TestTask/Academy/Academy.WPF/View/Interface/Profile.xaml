@@ -10,7 +10,7 @@
         <StackPanel Background="DarkGray" Height="Auto" Grid.Column="0">
             <Button Name="BtnAdminPanel" Background="LightGray" Margin="3" Click="BtnAdminPanel_Click">AdminPanel</Button>
             <Button Name="BtnSchedule" Background="LightGray" Margin="3" Click="BtnSchedule_Click">Schedule</Button>
-            <Button Name="BtnMarks" Background="LightGray" Margin="3">Marks</Button>
+            <Button Name="BtnMarks" Background="LightGray" Margin="3" Click="BtnMarks_Click">Marks</Button>
             <Button Name="BtnLogOut" Background="LightGray" Margin="3" Click="BtnLogOut_Click">Log out</Button>
         </StackPanel>
         <StackPanel Grid.Column="1">
