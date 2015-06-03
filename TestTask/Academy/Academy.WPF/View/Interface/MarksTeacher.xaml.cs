@@ -22,6 +22,7 @@ namespace Academy.WPF.View.Interface
         public MarksTeacher()
         {
             InitializeComponent();
+            WindowMarksTeacher.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
     }
 }

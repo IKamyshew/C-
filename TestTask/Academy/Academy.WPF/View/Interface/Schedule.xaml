@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Academy.WPF.View.Interface.Schedule"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Schedule" Height="400" Width="900" FontFamily="Comic Sans MS" Name="WindowSchedule">
+        Title="Schedule" Height="400" Width="900" FontFamily="Comic Sans MS" Name="WindowSchedule" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -42,16 +42,53 @@
                              Binding="{Binding Path=Subject.Name}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid Grid.Row="1" Grid.Column="1" x:Name="TableNewSchedule" AutoGenerateColumns="False" BeginningEdit="Edit_Cell">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="50" Header="Lesson"
-                             Binding="{Binding Path=Lesson}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="70" Header="Classroom" 
-                             Binding="{Binding Path=Classroom}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="220" Header="Subject" 
-                             Binding="{Binding Path=Subject.Name}"></DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <Grid Name="TableNewSchedule" Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="1.1*"></ColumnDefinition>
+                    <ColumnDefinition Width="3.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Content="Lesson"/>
+                <Label Grid.Row="0" Grid.Column="1" Content="Classroom"/>
+                <Label Grid.Row="0" Grid.Column="2" Content="Subject"/>
+                <TextBox Grid.Row="1" Grid.Column="0" IsReadOnly="True" Text="1" Name="TBoxScheduleLess1"/>
+                <TextBox Grid.Row="2" Grid.Column="0" IsReadOnly="True" Text="2" Name="TBoxScheduleLess2"/>
+                <TextBox Grid.Row="3" Grid.Column="0" IsReadOnly="True" Text="3" Name="TBoxScheduleLess3"/>
+                <TextBox Grid.Row="4" Grid.Column="0" IsReadOnly="True" Text="4" Name="TBoxScheduleLess4"/>
+                <TextBox Grid.Row="5" Grid.Column="0" IsReadOnly="True" Text="5" Name="TBoxScheduleLess5"/>
+                <TextBox Grid.Row="6" Grid.Column="0" IsReadOnly="True" Text="6" Name="TBoxScheduleLess6"/>
+                <TextBox Grid.Row="7" Grid.Column="0" IsReadOnly="True" Text="7" Name="TBoxScheduleLess7"/>
+                <TextBox Grid.Row="8" Grid.Column="0" IsReadOnly="True" Text="8" Name="TBoxScheduleLess8"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="" Name="TBoxScheduleClass1"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="" Name="TBoxScheduleClass2"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="" Name="TBoxScheduleClass3"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Text="" Name="TBoxScheduleClass4"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="" Name="TBoxScheduleClass5"/>
+                <TextBox Grid.Row="6" Grid.Column="1" Text="" Name="TBoxScheduleClass6"/>
+                <TextBox Grid.Row="7" Grid.Column="1" Text="" Name="TBoxScheduleClass7"/>
+                <TextBox Grid.Row="8" Grid.Column="1" Text="" Name="TBoxScheduleClass8"/>
+                <ComboBox Grid.Row="1" Grid.Column="2" Name="CBoxScheduleSubj1"/>
+                <ComboBox Grid.Row="2" Grid.Column="2" Name="CBoxScheduleSubj2"/>
+                <ComboBox Grid.Row="3" Grid.Column="2" Name="CBoxScheduleSubj3"/>
+                <ComboBox Grid.Row="4" Grid.Column="2" Name="CBoxScheduleSubj4"/>
+                <ComboBox Grid.Row="5" Grid.Column="2" Name="CBoxScheduleSubj5"/>
+                <ComboBox Grid.Row="6" Grid.Column="2" Name="CBoxScheduleSubj6"/>
+                <ComboBox Grid.Row="7" Grid.Column="2" Name="CBoxScheduleSubj7"/>
+                <ComboBox Grid.Row="8" Grid.Column="2" Name="CBoxScheduleSubj8"/>
+                <Label Grid.Row="9" Grid.ColumnSpan="3" Name="ErrorMsg" TextElement.Foreground="Red"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
