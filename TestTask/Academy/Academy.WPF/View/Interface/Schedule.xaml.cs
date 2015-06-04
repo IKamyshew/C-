@@ -37,6 +37,13 @@ namespace Academy.WPF.View.Interface
                 groupNames.Add(group.Name);
             CBoxChooseGroup.ItemsSource = groupNames;
 
+            if (LoggedInUser.RoleId == 3)
+            {
+                CBoxChooseGroup.SelectedItem = LoggedInUser.Group.Name;
+                CBoxChooseGroup.Focusable = false;
+                CBoxChooseGroup.IsHitTestVisible = false;
+            }
+
             if (LoggedInUser.RoleId != 1)
             {
                 TableNewSchedule.Visibility = Visibility.Collapsed;
@@ -47,8 +54,10 @@ namespace Academy.WPF.View.Interface
             } else { 
                 List<Subject> allSubjects = db.GetAllSubjects();
                 List<string> allSubjectNames = new List<string>();
+
                 foreach (var subj in allSubjects)
                     allSubjectNames.Add(subj.Name);
+
                 CBoxScheduleSubj1.ItemsSource = allSubjectNames;
                 CBoxScheduleSubj2.ItemsSource = allSubjectNames;
                 CBoxScheduleSubj3.ItemsSource = allSubjectNames;
@@ -80,9 +89,6 @@ namespace Academy.WPF.View.Interface
 
             if (DateFilter != null && GroupFilter != null)
                 TableSchedule.ItemsSource = db.GetSchedulesForGroupAndDate(GroupFilter.Id, DateFilter.Value);
-
-            if (LoggedInUser.RoleId == 1 && TableSchedule.ItemsSource != null)
-                LoadNewSchedule();
         }
 
         private void BtnAddSchedule_Click(object sender, RoutedEventArgs e)
@@ -110,7 +116,46 @@ namespace Academy.WPF.View.Interface
             }
             if (db.IsSchedulesContainsDateForGroup(myDate, GroupFilter.Id))
             {
+                newSchedule = (List<Academy.Model.Entities.Schedule>)TableSchedule.ItemsSource;
 
+                try { 
+                    newSchedule[0].Classroom = Int32.Parse(TBoxScheduleClass1.Text);
+                    newSchedule[1].Classroom = Int32.Parse(TBoxScheduleClass2.Text);
+                    newSchedule[2].Classroom = Int32.Parse(TBoxScheduleClass3.Text);
+                    newSchedule[3].Classroom = Int32.Parse(TBoxScheduleClass4.Text);
+                    newSchedule[4].Classroom = Int32.Parse(TBoxScheduleClass5.Text);
+                    newSchedule[5].Classroom = Int32.Parse(TBoxScheduleClass6.Text);
+                    newSchedule[6].Classroom = Int32.Parse(TBoxScheduleClass7.Text);
+                    newSchedule[7].Classroom = Int32.Parse(TBoxScheduleClass8.Text);
+                } catch (Exception ex) {
+                    if (ex is NullReferenceException || ex is FormatException)
+                    {
+                        ErrorMsg.Content = "Please fill all classrooms with numbers.";
+                        return;
+                    }
+                    throw;
+                }
+
+                try {
+                    newSchedule[0].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj1.SelectedItem)).Id;
+                    newSchedule[1].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj2.SelectedItem)).Id;
+                    newSchedule[2].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj3.SelectedItem)).Id;
+                    newSchedule[3].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj4.SelectedItem)).Id;
+                    newSchedule[4].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj5.SelectedItem)).Id;
+                    newSchedule[5].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj6.SelectedItem)).Id;
+                    newSchedule[6].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj7.SelectedItem)).Id;
+                    newSchedule[7].SubjectId = (db.GetSubjectByName((string)CBoxScheduleSubj8.SelectedItem)).Id;
+                } catch (NullReferenceException) {
+                    ErrorMsg.Content = "Please choose subjects to all lessons.";
+                    return;
+                }
+
+
+                foreach (var schedule in newSchedule)
+                    db.UpdateSchedule(schedule);
+
+                if (DateFilter != null && GroupFilter != null)
+                TableSchedule.ItemsSource = db.GetSchedulesForGroupAndDate(GroupFilter.Id, DateFilter.Value);
             } else {
                 for (int i = 0; i < newSchedule.Capacity; i++)
                 {
@@ -162,44 +207,8 @@ namespace Academy.WPF.View.Interface
                 }
 
                 foreach (var schedule in newSchedule)
-                {
                     db.AddSchedule(schedule);
-                }
             }
-            /*List<Academy.Model.Entities.Schedule> newSchedule = (List<Academy.Model.Entities.Schedule>)TableNewSchedule.ItemsSource;
-            List<Academy.Model.Entities.Schedule> modifiedEntities = new List<Academy.Model.Entities.Schedule>(Academy.Model.Entities.Schedule.MaxLessonsPerDay);
-
-            
-
-            if (db.IsSchedulesContainsDateForGroup(myDate, GroupFilter.Id))
-            {
-                modifiedEntities = db.GetSchedulesForGroupAndDate(GroupFilter.Id, myDate);
-                for (int i = 0; i < newSchedule.Capacity; i++)
-                {
-                    modifiedEntities[i].Classroom = newSchedule[i].Classroom;
-                    modifiedEntities[i].SubjectId = newSchedule[i].SubjectId;
-
-                    db.UpdateSchedule(modifiedEntities[i]);
-                }
-            } else {
-                foreach (var schedule in newSchedule)
-                {
-                    Academy.Model.Entities.Schedule scheduleNew = new Academy.Model.Entities.Schedule();
-                    scheduleNew = schedule;
-                    scheduleNew.Date = myDate;
-                    db.AddSchedule(scheduleNew);
-                }
-            }*/
-        }
-
-
-        private void Edit_Cell(object sender, DataGridBeginningEditEventArgs e)
-        {
-
-        }
-
-        private void LoadNewSchedule()
-        {
         }
 
         //side buttons

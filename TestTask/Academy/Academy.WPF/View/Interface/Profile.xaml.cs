@@ -20,37 +20,52 @@ namespace Academy.WPF
 {
     public partial class Profile : Window
     {
-        private User User;
+        private User LoggedInUser;
 
         public Profile(User CurrentUser)
         {
-            User = CurrentUser;
+            LoggedInUser = CurrentUser;
 
             InitializeComponent();
 
             WindowProfile.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            if (User.RoleId == 3)
+            if (LoggedInUser.RoleId == 3)
                 BtnAdminPanel.Visibility = Visibility.Collapsed;
 
-            BlockFirstName.Text = "First Name: " + User.FirstName;
-            BlockLastName.Text = "Last Name: " + User.LastName;
-            BlockRole.Text = "Role: " + User.Role.Name;
-            BlockGroup.Text = "Group: " + User.Group.Name;
+            if (LoggedInUser.RoleId == 1)
+                BtnMarks.Visibility = Visibility.Collapsed;
+
+            BlockFirstName.Text = "First Name: " + LoggedInUser.FirstName;
+            BlockLastName.Text = "Last Name: " + LoggedInUser.LastName;
+            BlockRole.Text = "Role: " + LoggedInUser.Role.Name;
+            BlockGroup.Text = "Group: " + LoggedInUser.Group.Name;
 
         }
 
         //side buttons
         private void BtnAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            AdminPanel adminPanelWin = new AdminPanel(User);
+            AdminPanel adminPanelWin = new AdminPanel(LoggedInUser);
             adminPanelWin.Show();
             this.Close();
         }
 
         private void BtnSchedule_Click(object sender, RoutedEventArgs e)
         {
-            Academy.WPF.View.Interface.Schedule scheduleWin = new Academy.WPF.View.Interface.Schedule(User);
+            Academy.WPF.View.Interface.Schedule scheduleWin = new Academy.WPF.View.Interface.Schedule(LoggedInUser);
             scheduleWin.Show();
+            this.Close();
+        }
+
+        private void BtnMarks_Click(object sender, RoutedEventArgs e)
+        {
+            if (LoggedInUser.RoleId == 3) { 
+                Marks MarkWin = new Marks(LoggedInUser);
+                MarkWin.Show();
+            } else {
+                MarksTeacher MarkWin = new MarksTeacher(LoggedInUser);
+                MarkWin.Show();
+            }
             this.Close();
         }
 
@@ -60,13 +75,5 @@ namespace Academy.WPF
             logInWin.Show();
             this.Close();
         }
-
-        private void BtnMarks_Click(object sender, RoutedEventArgs e)
-        {
-            Marks MarkWin = new Marks(User);
-            MarkWin.Show();
-            this.Close();
-        }
-
     }
 }

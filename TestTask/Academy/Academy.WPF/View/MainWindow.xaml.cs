@@ -38,6 +38,8 @@ namespace Academy.WPF
                 Profile profileWin = new Profile(User.GetCurrentUserByLogin(Login));
                 profileWin.Show();
                 this.Close();
+            } else {
+                ErrorMsg.Content = "Incorrect login or password";
             }
         }
 

@@ -2,6 +2,7 @@
 using Academy.Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,10 @@ namespace Academy.WPF.View.Interface
 {
     public partial class Marks : Window
     {
-        Entities db;
-        User LoggedInUser;
+        private Entities db;
+        private User LoggedInUser;
+        private List<DateTime> TableHeaders { get; set; }
+        List<Mark> headersMarks;
 
         public Marks(User user)
         {
@@ -28,35 +31,94 @@ namespace Academy.WPF.View.Interface
 
             InitializeComponent();
             WindowMark.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            headersMarks = db.GetMarksWithDistinctDateForStudent(LoggedInUser.Id);
+
+            List<DateTime> headersDatesOnLoad = new List<DateTime>();
+
+            foreach (var mark in headersMarks)
+                headersDatesOnLoad.Add(mark.Date);
+
+            CBoxDateFrom.ItemsSource = headersDatesOnLoad;
+            CBoxDateTo.ItemsSource = headersDatesOnLoad;
+
+            RefrashTable();
         }
 
+        private void BtnFilterMarks_Click(object sender, RoutedEventArgs e)
+        {
+            if (CBoxDateFrom.SelectedItem == null || CBoxDateTo.SelectedItem == null)
+                return;
+
+            headersMarks = db.GetMarksWithDistinctDatesForStudentInPeriod(LoggedInUser.Id, (DateTime)CBoxDateFrom.SelectedItem, (DateTime)CBoxDateTo.SelectedItem);
+
+            RefrashTable();
+        }
+            
+
         private void RefrashTable() {
-            TableView table = new TableView();
-            List<Mark> headersMarks = db.GetMarksWithDistinctDateForStudent(LoggedInUser.Id);
+            TableMarks.ItemsSource = null;
+            TableMarks.Columns.Clear();
+            TableMarks.Items.Clear();
+            TableMarks.Items.Refresh();
+
             List<DateTime> headersDates = new List<DateTime>();
+
             foreach(var mark in headersMarks)
                 headersDates.Add(mark.Date);
-            table.TableHeaders = headersDates;
+
+            TableHeaders = headersDates;
 
             DataGridTextColumn textColumn = new DataGridTextColumn(); 
             textColumn.Header = "Subjects"; 
             textColumn.Binding = new Binding("Subject"); 
-            TableMarks.Columns.Add(textColumn); 
+            TableMarks.Columns.Add(textColumn);
+
+            int index = 0;
+            foreach (var header in TableHeaders)
+            {
+                TableMarks.Columns.Add(new DataGridTextColumn
+                {
+                    Header = header.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture),
+                    Binding = new Binding(string.Format("Marks[{0}].MarkValue", index++))
+                });
+            }
 
             List<Subject> allSubjects = db.GetAllSubjects();
-        }
+            List<TableView> rows = new List<TableView>();
 
-        private void AddControls(int controlNumber)
-        {
-            TextBox newTextbox = new TextBox();
+            double totalAVG = 0;
+            int countAVG = 0;
+            foreach (var subj in allSubjects)
+            {
+                TableView row = new TableView();
+                row.Subject = subj.Name;
+                row.Marks = db.GetMarksForSubjectAndStudent(subj.Id, LoggedInUser.Id);
+                if (row.Marks.Count != 0)
+                {
+                    double sum = 0;
+                    foreach (var mark in row.Marks)
+                        sum += mark.MarkValue;
+                    row.Average = Math.Round(sum / row.Marks.Count(), 2);
+                    totalAVG += row.Average;
+                    countAVG++;
+                }
+                rows.Add(row);
+            }
 
-            // textbox needs a unique id to maintain state information
-            newTextbox.Name = "TextBox_" + controlNumber;
+            TableMarks.ItemsSource = rows;
 
+            DataGridTextColumn textColumnAverage = new DataGridTextColumn();
+            textColumnAverage.Header = "Average";
+            textColumnAverage.Binding = new Binding("Average");
+            TableMarks.Columns.Add(textColumnAverage);
 
-            // add the label and textbox to the panel, then add the panel to the form
-            newPanel.Controls.Add(newTextbox);
-            form1.Controls.Add(newPanel);
+            double resultAverage = 0;
+
+            if (countAVG != 0)
+                resultAverage = totalAVG / countAVG;
+
+            BoxTotalAverage.Text = String.Format("{0:F2}", resultAverage);
         }
 
         //Side Btns
@@ -73,12 +135,12 @@ namespace Academy.WPF.View.Interface
             logInWin.Show();
             this.Close();
         }
-    }
 
-    private class TableView
-    {
-        public List<DateTime> TableHeaders { get; set; }
-        public string Subject { get; set; }
-        public List<Mark> marks { get; set; }
+        class TableView
+        {
+            public string Subject { get; set; }
+            public List<Mark> Marks { get; set; }
+            public double Average { get; set; }
+        }
     }
 }

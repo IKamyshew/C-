@@ -22,15 +22,10 @@
                 <Label>To: </Label>
                 <ComboBox Name="CBoxDateTo" SelectedValue="1" Width="150"/>
                 <Button Name="BtnFilterMarks" Click="BtnFilterMarks_Click" Width="75">Filter</Button>
+                <Label>Total Average: </Label>
+                <TextBox Name="BoxTotalAverage" IsReadOnly="True" Width="30"/>
             </WrapPanel>
-            <DataGrid Grid.Row="1" x:Name="TableMarks" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Width="110" Header="Subject ID"
-                             Binding="{Binding Path=Id}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="110" Header="Subject Name"
-                             Binding="{Binding Path=Name}"></DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <DataGrid Grid.Row="1" x:Name="TableMarks" AutoGenerateColumns="False"/>
         </Grid>
     </Grid>
 </Window>

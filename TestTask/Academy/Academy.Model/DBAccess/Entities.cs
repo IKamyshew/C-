@@ -334,6 +334,14 @@ namespace Academy.Model.DBAccess
             return db.Marks.Where(s => s.SubjectId == subjectID).ToList();
         }
 
+        public List<Mark> GetMarksForSubjectAndStudent(int subjectID, int studentID)
+        {
+            return db.Marks.Where(s => s.SubjectId == subjectID)
+                           .Where(stud => stud.StudentId == studentID)
+                           .OrderBy(d => d.Date)
+                           .ToList();
+        }
+
         public List<Mark> GetMarksWithDistinctDateForSubject(int subjectID)
         {
             return db.Marks.Where(s => s.SubjectId == subjectID)

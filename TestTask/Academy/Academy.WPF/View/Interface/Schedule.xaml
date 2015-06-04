@@ -38,7 +38,7 @@
                              Binding="{Binding Path=Lesson}"></DataGridTextColumn>
                     <DataGridTextColumn Width="70" Header="Classroom" 
                              Binding="{Binding Path=Classroom}"></DataGridTextColumn>
-                    <DataGridTextColumn Width="220" Header="Subject" 
+                    <DataGridTextColumn Width="210" Header="Subject" 
                              Binding="{Binding Path=Subject.Name}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
